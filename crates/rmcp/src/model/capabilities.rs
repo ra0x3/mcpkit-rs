@@ -324,14 +324,16 @@ macro_rules! builder {
                     <[<$Target Builder>]>::default()
                 }
             }
-            impl<S> [<$Target Builder>]<S> {
+            #[cfg(feature = "macros")]
+impl<S> [<$Target Builder>]<S> {
                 pub fn build(self) -> $Target {
                     $Target {
                         $( $f: self.$f, )*
                     }
                 }
             }
-            impl<S> From<[<$Target Builder>]<S>> for $Target {
+            #[cfg(feature = "macros")]
+impl<S> From<[<$Target Builder>]<S>> for $Target {
                 fn from(builder: [<$Target Builder>]<S>) -> Self {
                     builder.build()
                 }
@@ -352,7 +354,8 @@ macro_rules! builder {
     };
     ($Target: ident @impl_toggle [$($ff: ident: $Tf: ty,)*][$fn: ident: $TN: ty][$($ft: ident: $Tt: ty,)*]) => {
         paste! {
-            impl<
+            #[cfg(feature = "macros")]
+impl<
                 $(const [<$ff:upper>]: bool,)*
                 $(const [<$ft:upper>]: bool,)*
             > [<$Target Builder>]<[<$Target BuilderState>]<

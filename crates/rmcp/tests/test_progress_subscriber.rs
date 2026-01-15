@@ -1,9 +1,9 @@
-use futures::StreamExt;
+#![cfg(all(feature = "client", feature = "server", feature = "macros"))]
+
 use rmcp::{
-    ClientHandler, Peer, RoleServer, ServerHandler, ServiceExt,
+    ClientHandler, Peer, RoleServer, ServerHandler,
     handler::{client::progress::ProgressDispatcher, server::tool::ToolRouter},
-    model::{CallToolRequestParams, ClientRequest, Meta, ProgressNotificationParam, Request},
-    service::PeerRequestOptions,
+    model::{Meta, ProgressNotificationParam},
     tool, tool_handler, tool_router,
 };
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
