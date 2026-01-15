@@ -359,7 +359,7 @@ impl<const E: bool, const R: bool, const S: bool, const TASKS: bool>
     }
 }
 
-#[cfg(test)]
+#[cfg(all(test, feature = "macros"))]
 mod test {
     use super::*;
     #[test]

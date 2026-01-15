@@ -113,11 +113,17 @@ impl wasi::exports::cli::run::Guest for TokioCliRunner {
                 .with_writer(std::io::stderr)
                 .with_ansi(false)
                 .init();
-            let server = calculator::Calculator::new()
-                .serve(wasi_io())
-                .await
-                .unwrap();
-            server.waiting().await.unwrap();
+            match calculator::Calculator::new().serve(wasi_io()).await {
+                Ok(server) => {
+                    tracing::info!("Calculator server started successfully");
+                    if let Err(e) = server.waiting().await {
+                        tracing::error!("Server error while waiting: {:?}", e);
+                    }
+                }
+                Err(e) => {
+                    tracing::error!("Failed to start server: {:?}", e);
+                }
+            }
         });
         Ok(())
     }

@@ -52,8 +52,8 @@ impl Calculator {
     }
 
     #[tool(description = "Calculate the difference of two numbers")]
-    fn sub(&self, Parameters(SubRequest { a, b }): Parameters<SubRequest>) -> Json<i32> {
-        Json(a - b)
+    fn sub(&self, Parameters(SubRequest { a, b }): Parameters<SubRequest>) -> String {
+        (a - b).to_string()
     }
 }
 

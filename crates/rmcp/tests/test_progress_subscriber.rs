@@ -1,4 +1,4 @@
-#![cfg(all(feature = "client", feature = "server"))]
+#![cfg(all(feature = "client", feature = "server", feature = "macros"))]
 
 use futures::StreamExt;
 use rmcp::{

@@ -218,6 +218,7 @@ mod tests {
     use serde_json;
 
     use super::*;
+    use crate::model::RawImageContent;
 
     #[test]
     fn test_prompt_message_image_serialization() {

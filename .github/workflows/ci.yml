@@ -117,10 +117,23 @@ jobs:
         run: cargo sort --check --workspace
 
   clippy:
-    name: Lint with Clippy
+    name: Lint with Clippy ${{ matrix.features || 'default features' }}
     runs-on: ubuntu-latest
     needs: [fmt, cargo-sort]
     if: always() && !cancelled() && !contains(needs.*.result, 'failure')
+    strategy:
+      matrix:
+        features:
+          - ''  # default features
+          - '--all-features'
+          - '--no-default-features --features client'
+          - '--no-default-features --features server'
+          - '--no-default-features --features macros,server'
+          - '--features client'
+          - '--features server'
+          - '--features client,transport-child-process'
+          - '--features server,transport-streamable-http-server'
+          - '--features server,wasm-tools'
     steps:
       - uses: actions/checkout@v6
 
@@ -129,8 +142,8 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2
 
-      - name: Run clippy
-        run: cargo clippy --all-targets --all-features -- -D warnings
+      - name: Run clippy ${{ matrix.features || 'default features' }}
+        run: cargo clippy --all-targets ${{ matrix.features }} -- -D warnings
 
   security-audit:
     name: Security Audit

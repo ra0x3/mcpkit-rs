@@ -1,3 +1,5 @@
+#![cfg(feature = "schemars")]
+
 use rmcp::{
     ServiceExt,
     service::QuitReason,
