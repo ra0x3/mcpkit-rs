@@ -17,8 +17,7 @@ This example leverages [WasmEdge](https://wasmedge.org/), a high-performance Web
 
 This example provides two versions:
 - **v1**: Basic implementation with in-memory storage (works with any WASI runtime like Wasmtime)
-- **v2**: Simple in-memory with enhanced features (works with any WASI runtime)
-- **v2-wasmedge**: Full-stack implementation with **REAL PostgreSQL** connections (requires WasmEdge)
+- **v2**: Full-stack implementation with **REAL PostgreSQL** connections (requires WasmEdge runtime and special build process)
 
 ## Architecture
 

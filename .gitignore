@@ -29,8 +29,4 @@ __pycache__/
 #.idea/
 
 # WASI component artifacts
-examples/wasm-fullstack/v1-component.wasm
-examples/wasm-fullstack/v2-component.wasm
-examples/wasm-fullstack/wasi_snapshot_preview1.command.wasm
-examples/wasm-calculator/*-component.wasm
-examples/wasm-calculator/wasi_snapshot_preview1.command.wasm
+*.wasm
