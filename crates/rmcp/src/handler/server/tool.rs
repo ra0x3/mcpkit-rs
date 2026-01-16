@@ -453,7 +453,8 @@ mod tests {
 
         let mut context = ToolCallContext::new(
             &service,
-            CallToolRequestParam {
+            CallToolRequestParams {
+                meta: None,
                 name: "test_tool".into(),
                 arguments: None,
                 task: None,
@@ -488,7 +489,8 @@ mod tests {
 
         let mut context = ToolCallContext::new(
             &service,
-            CallToolRequestParam {
+            CallToolRequestParams {
+                meta: None,
                 name: "test_tool".into(),
                 arguments: Some(args),
                 task: None,
@@ -523,7 +525,8 @@ mod tests {
 
         let mut context = ToolCallContext::new(
             &service,
-            CallToolRequestParam {
+            CallToolRequestParams {
+                meta: None,
                 name: "test_tool".into(),
                 arguments: None,
                 task: None,
@@ -563,7 +566,8 @@ mod tests {
 
         let context = ToolCallContext::new(
             &service,
-            CallToolRequestParam {
+            CallToolRequestParams {
+                meta: None,
                 name: "async_tool".into(),
                 arguments: Some(args),
                 task: None,
@@ -609,7 +613,8 @@ mod tests {
 
         let context = ToolCallContext::new(
             &service,
-            CallToolRequestParam {
+            CallToolRequestParams {
+                meta: None,
                 name: "sync_tool".into(),
                 arguments: Some(args),
                 task: None,
@@ -655,7 +660,8 @@ mod tests {
 
         let context = ToolCallContext::new(
             &service,
-            CallToolRequestParam {
+            CallToolRequestParams {
+                meta: None,
                 name: "failing_tool".into(),
                 arguments: Some(args),
                 task: None,
@@ -706,7 +712,8 @@ mod tests {
 
         let context = ToolCallContext::new(
             &service,
-            CallToolRequestParam {
+            CallToolRequestParams {
+                meta: None,
                 name: "json_tool".into(),
                 arguments: Some(args),
                 task: None,

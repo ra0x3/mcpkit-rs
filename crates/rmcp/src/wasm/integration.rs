@@ -9,7 +9,7 @@ use super::{WasmToolExecutor, WasmToolRegistry};
 use crate::{
     ErrorData,
     handler::server::ServerHandler,
-    model::{CallToolRequestParam, CallToolResult, ListToolsResult, PaginatedRequestParam},
+    model::{CallToolRequestParams, CallToolResult, ListToolsResult, PaginatedRequestParams},
     service::{RequestContext, RoleServer},
 };
 
@@ -44,7 +44,7 @@ impl WasmToolHandler {
 impl ServerHandler for WasmToolHandler {
     async fn list_tools(
         &self,
-        _request: Option<PaginatedRequestParam>,
+        _request: Option<PaginatedRequestParams>,
         _context: RequestContext<RoleServer>,
     ) -> Result<ListToolsResult, ErrorData> {
         let tools = self.executor.list_tools();
@@ -57,7 +57,7 @@ impl ServerHandler for WasmToolHandler {
 
     async fn call_tool(
         &self,
-        request: CallToolRequestParam,
+        request: CallToolRequestParams,
         _context: RequestContext<RoleServer>,
     ) -> Result<CallToolResult, ErrorData> {
         let arguments = request.arguments.unwrap_or_default();
@@ -89,7 +89,7 @@ impl<H: ServerHandler> CompositeToolHandler<H> {
 impl<H: ServerHandler + Send + Sync> ServerHandler for CompositeToolHandler<H> {
     async fn list_tools(
         &self,
-        request: Option<PaginatedRequestParam>,
+        request: Option<PaginatedRequestParams>,
         context: RequestContext<RoleServer>,
     ) -> Result<ListToolsResult, ErrorData> {
         // Get tools from both handlers
@@ -106,7 +106,7 @@ impl<H: ServerHandler + Send + Sync> ServerHandler for CompositeToolHandler<H> {
 
     async fn call_tool(
         &self,
-        request: CallToolRequestParam,
+        request: CallToolRequestParams,
         context: RequestContext<RoleServer>,
     ) -> Result<CallToolResult, ErrorData> {
         // Check if it's a WASM tool first
