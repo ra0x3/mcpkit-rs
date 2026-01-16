@@ -91,9 +91,8 @@ impl WasmToolRegistry {
         let mut registry = Self::new(credential_provider, runtime);
 
         // Find all manifest files
-        let entries = std::fs::read_dir(tool_dir).map_err(|e| {
-            WasmError::LoadError(format!("Failed to read tool directory: {}", e))
-        })?;
+        let entries = std::fs::read_dir(tool_dir)
+            .map_err(|e| WasmError::LoadError(format!("Failed to read tool directory: {}", e)))?;
 
         for entry in entries {
             let entry = entry.map_err(|e| {
@@ -111,11 +110,7 @@ impl WasmToolRegistry {
                             tracing::info!("Loaded WASM tool: {}", name);
                         }
                         Err(e) => {
-                            tracing::error!(
-                                "Failed to load tool from {:?}: {}",
-                                manifest_path,
-                                e
-                            );
+                            tracing::error!("Failed to load tool from {:?}: {}", manifest_path, e);
                         }
                     }
                 }
@@ -153,9 +148,8 @@ impl WasmToolRegistry {
             )));
         }
 
-        let wasm_bytes = std::fs::read(&wasm_path).map_err(|e| {
-            WasmError::LoadError(format!("Failed to read WASM module: {}", e))
-        })?;
+        let wasm_bytes = std::fs::read(&wasm_path)
+            .map_err(|e| WasmError::LoadError(format!("Failed to read WASM module: {}", e)))?;
 
         // Compile the module
         let compiled_module = self.runtime.compile_module(&wasm_bytes)?;

@@ -41,9 +41,7 @@ impl ServerHandler for Server {
             let _enter = span.enter();
 
             if let Err(e) = peer
-                .notify_resource_updated(ResourceUpdatedNotificationParam {
-                    uri: uri.clone(),
-                })
+                .notify_resource_updated(ResourceUpdatedNotificationParam { uri: uri.clone() })
                 .await
             {
                 panic!("Failed to send notification: {}", e);
@@ -154,15 +152,11 @@ async fn test_custom_client_notification_reaches_server() -> anyhow::Result<()> 
 
     client
         .send_notification(ClientNotification::CustomNotification(
-            CustomNotification::new(
-                "notifications/custom-test",
-                Some(json!({ "foo": "bar" })),
-            ),
+            CustomNotification::new("notifications/custom-test", Some(json!({ "foo": "bar" }))),
         ))
         .await?;
 
-    tokio::time::timeout(std::time::Duration::from_secs(5), receive_signal.notified())
-        .await?;
+    tokio::time::timeout(std::time::Duration::from_secs(5), receive_signal.notified()).await?;
 
     let (method, params) = payload.lock().await.take().expect("payload set");
     assert_eq!("notifications/custom-test", method);
@@ -175,10 +169,7 @@ async fn test_custom_client_notification_reaches_server() -> anyhow::Result<()> 
 struct CustomServerNotifier;
 
 impl ServerHandler for CustomServerNotifier {
-    async fn on_initialized(
-        &self,
-        context: rmcp::service::NotificationContext<rmcp::RoleServer>,
-    ) {
+    async fn on_initialized(&self, context: rmcp::service::NotificationContext<rmcp::RoleServer>) {
         let peer = context.peer.clone();
         tokio::spawn(async move {
             peer.send_notification(ServerNotification::CustomNotification(
@@ -237,8 +228,7 @@ async fn test_custom_server_notification_reaches_client() -> anyhow::Result<()> 
     .serve(client_transport)
     .await?;
 
-    tokio::time::timeout(std::time::Duration::from_secs(5), receive_signal.notified())
-        .await?;
+    tokio::time::timeout(std::time::Duration::from_secs(5), receive_signal.notified()).await?;
 
     let (method, params) = payload.lock().await.take().expect("payload set");
     assert_eq!("notifications/custom-test", method);

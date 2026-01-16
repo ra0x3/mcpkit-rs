@@ -55,12 +55,10 @@ async fn get_todos(
     pool: axum::extract::State<DbPool>,
 ) -> Result<Json<Vec<Todo>>, StatusCode> {
     let todos = if let Some(user_id) = params.user_id {
-        sqlx::query_as::<_, Todo>(
-            "SELECT * FROM todos WHERE user_id = $1 ORDER BY created_at DESC",
-        )
-        .bind(user_id)
-        .fetch_all(&*pool)
-        .await
+        sqlx::query_as::<_, Todo>("SELECT * FROM todos WHERE user_id = $1 ORDER BY created_at DESC")
+            .bind(user_id)
+            .fetch_all(&*pool)
+            .await
     } else {
         sqlx::query_as::<_, Todo>("SELECT * FROM todos ORDER BY created_at DESC")
             .fetch_all(&*pool)
@@ -181,9 +179,7 @@ async fn execute_sql(
     }
 }
 
-async fn get_stats(
-    pool: axum::extract::State<DbPool>,
-) -> Result<Json<Value>, StatusCode> {
+async fn get_stats(pool: axum::extract::State<DbPool>) -> Result<Json<Value>, StatusCode> {
     let result = sqlx::query_as::<_, (i64, i64, i64, i64)>(
         "SELECT total, completed, pending, unique_users FROM todo_stats",
     )
@@ -206,9 +202,8 @@ async fn get_stats(
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() {
-    let database_url = std::env::var("DATABASE_URL").unwrap_or_else(|_| {
-        "postgresql://wasi_user:wasi_password@localhost/todos_db".to_string()
-    });
+    let database_url = std::env::var("DATABASE_URL")
+        .unwrap_or_else(|_| "postgresql://wasi_user:wasi_password@localhost/todos_db".to_string());
 
     let pool = PgPoolOptions::new()
         .max_connections(5)

@@ -12,8 +12,7 @@ use serde_json::json;
 
 /// Build and prepare the calculator WASM module for testing
 async fn ensure_calculator_wasm() -> PathBuf {
-    let calculator_dir =
-        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("examples/calculator-wasm");
+    let calculator_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("examples/calculator-wasm");
 
     // Build the WASM module
     let output = tokio::process::Command::new("cargo")
@@ -34,14 +33,12 @@ async fn ensure_calculator_wasm() -> PathBuf {
     }
 
     // Copy to fixtures
-    let wasm_source =
-        calculator_dir.join("target/wasm32-wasip1/release/calculator-wasm.wasm");
+    let wasm_source = calculator_dir.join("target/wasm32-wasip1/release/calculator-wasm.wasm");
     let wasm_dest = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .join("tests/fixtures/wasm-tools/calculator/calculator.wasm");
 
     std::fs::create_dir_all(wasm_dest.parent().unwrap()).ok();
-    std::fs::copy(wasm_source, &wasm_dest)
-        .expect("Failed to copy WASM module to fixtures");
+    std::fs::copy(wasm_source, &wasm_dest).expect("Failed to copy WASM module to fixtures");
 
     wasm_dest
 }
@@ -50,12 +47,10 @@ async fn ensure_calculator_wasm() -> PathBuf {
 async fn create_test_executor() -> WasmToolExecutor {
     ensure_calculator_wasm().await;
 
-    let fixtures_dir =
-        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/wasm-tools");
+    let fixtures_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/wasm-tools");
 
     let provider = Arc::new(InMemoryCredentialProvider::new());
-    let _runtime =
-        Arc::new(rmcp::wasm::WasmRuntime::new().expect("Failed to create runtime"));
+    let _runtime = Arc::new(rmcp::wasm::WasmRuntime::new().expect("Failed to create runtime"));
     let registry = Arc::new(
         WasmToolRegistry::load_from_directory(&fixtures_dir, provider)
             .expect("Failed to load WASM tools"),
@@ -364,12 +359,10 @@ async fn test_multiple_wasm_tools_concurrent() {
     // Test that multiple WASM tools can run concurrently without interference
     ensure_calculator_wasm().await;
 
-    let fixtures_dir =
-        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/wasm-tools");
+    let fixtures_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/wasm-tools");
 
     let provider = Arc::new(InMemoryCredentialProvider::new());
-    let _runtime =
-        Arc::new(rmcp::wasm::WasmRuntime::new().expect("Failed to create runtime"));
+    let _runtime = Arc::new(rmcp::wasm::WasmRuntime::new().expect("Failed to create runtime"));
     let registry = Arc::new(
         WasmToolRegistry::load_from_directory(&fixtures_dir, provider)
             .expect("Failed to load WASM tools"),

@@ -30,10 +30,7 @@ fn validate_tool_name(name: &str) -> ToolNameValidationResult {
 
     // Check length
     if name.is_empty() {
-        return ToolNameValidationResult::new(
-            false,
-            vec!["Tool name cannot be empty".to_string()],
-        );
+        return ToolNameValidationResult::new(false, vec!["Tool name cannot be empty".to_string()]);
     }
 
     if name.len() > 128 {
@@ -48,15 +45,11 @@ fn validate_tool_name(name: &str) -> ToolNameValidationResult {
 
     // Check for specific problematic patterns (these are warnings, not validation failures)
     if name.contains(' ') {
-        warnings.push(
-            "Tool name contains spaces, which may cause parsing issues".to_string(),
-        );
+        warnings.push("Tool name contains spaces, which may cause parsing issues".to_string());
     }
 
     if name.contains(',') {
-        warnings.push(
-            "Tool name contains commas, which may cause parsing issues".to_string(),
-        );
+        warnings.push("Tool name contains commas, which may cause parsing issues".to_string());
     }
 
     // Check for potentially confusing patterns (leading/trailing dashes, dots, slashes)
@@ -120,12 +113,8 @@ fn issue_tool_name_warning(name: &str, warnings: &[String]) {
     for warning in warnings {
         tracing::warn!("  - {}", warning);
     }
-    tracing::warn!(
-        "Tool registration will proceed, but this may cause compatibility issues."
-    );
-    tracing::warn!(
-        "Consider updating the tool name to conform to the MCP tool naming standard."
-    );
+    tracing::warn!("Tool registration will proceed, but this may cause compatibility issues.");
+    tracing::warn!("Consider updating the tool name to conform to the MCP tool naming standard.");
     tracing::warn!(
         "See SEP: Specify Format for Tool Names (https://github.com/modelcontextprotocol/modelcontextprotocol/issues/986) for more details."
     );

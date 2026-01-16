@@ -350,8 +350,8 @@ impl FullStackServerV2 {
             completed: Option<bool>,
         }
 
-        let import_todos: Vec<ImportTodo> = serde_json::from_str(&req.todos)
-            .map_err(|e| format!("Invalid JSON: {}", e))?;
+        let import_todos: Vec<ImportTodo> =
+            serde_json::from_str(&req.todos).map_err(|e| format!("Invalid JSON: {}", e))?;
 
         if import_todos.is_empty() {
             return Err("No todos to import".to_string());
@@ -388,8 +388,7 @@ impl ServerHandler for FullStackServerV2 {
     fn get_info(&self) -> ServerInfo {
         ServerInfo {
             instructions: Some(
-                "Full-Stack Server v2 - PostgreSQL via WasmEdge with extended operations"
-                    .into(),
+                "Full-Stack Server v2 - PostgreSQL via WasmEdge with extended operations".into(),
             ),
             capabilities: ServerCapabilities::builder().enable_tools().build(),
             ..Default::default()

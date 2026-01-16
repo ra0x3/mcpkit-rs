@@ -142,23 +142,13 @@ impl CredentialProvider for InMemoryCredentialProvider {
 
         // Validate type matches if possible
         match (&requirement.credential_type, value) {
-            (
-                super::manifest::CredentialType::OAuth2 { .. },
-                CredentialValue::OAuth2Token(_),
-            )
+            (super::manifest::CredentialType::OAuth2 { .. }, CredentialValue::OAuth2Token(_))
             | (super::manifest::CredentialType::ApiKey, CredentialValue::ApiKey(_))
-            | (
-                super::manifest::CredentialType::BasicAuth,
-                CredentialValue::BasicAuth { .. },
-            )
-            | (
-                super::manifest::CredentialType::BearerToken,
-                CredentialValue::BearerToken(_),
-            )
-            | (
-                super::manifest::CredentialType::Custom { .. },
-                CredentialValue::Custom(_),
-            ) => Ok(value.clone()),
+            | (super::manifest::CredentialType::BasicAuth, CredentialValue::BasicAuth { .. })
+            | (super::manifest::CredentialType::BearerToken, CredentialValue::BearerToken(_))
+            | (super::manifest::CredentialType::Custom { .. }, CredentialValue::Custom(_)) => {
+                Ok(value.clone())
+            }
             _ => {
                 // Type mismatch - for now we'll be lenient and convert
                 // In production, you might want to be stricter

@@ -118,8 +118,7 @@ async fn test_registry_operations() {
     assert_eq!(registry.list_tools().len(), 0);
 
     // Test loading non-existent directory
-    let result =
-        WasmToolRegistry::load_from_directory("/nonexistent/directory", provider.clone());
+    let result = WasmToolRegistry::load_from_directory("/nonexistent/directory", provider.clone());
     assert!(result.is_err());
 }
 

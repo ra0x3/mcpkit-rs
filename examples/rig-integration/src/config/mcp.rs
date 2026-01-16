@@ -1,8 +1,6 @@
 use std::{collections::HashMap, process::Stdio};
 
-use rmcp::{
-    RoleClient, ServiceExt, service::RunningService, transport::ConfigureCommandExt,
-};
+use rmcp::{RoleClient, ServiceExt, service::RunningService, transport::ConfigureCommandExt};
 use serde::{Deserialize, Serialize};
 
 use crate::mcp_adaptor::McpManager;
@@ -63,9 +61,8 @@ impl McpServerTransportConfig {
     pub async fn start(&self) -> anyhow::Result<RunningService<RoleClient, ()>> {
         let client = match self {
             McpServerTransportConfig::Streamable { url } => {
-                let transport = rmcp::transport::StreamableHttpClientTransport::from_uri(
-                    url.to_string(),
-                );
+                let transport =
+                    rmcp::transport::StreamableHttpClientTransport::from_uri(url.to_string());
                 ().serve(transport).await?
             }
             McpServerTransportConfig::Stdio {

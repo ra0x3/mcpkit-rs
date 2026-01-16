@@ -9,8 +9,7 @@ use common::handlers::TestClientHandler;
 use rmcp::{
     ServiceExt,
     model::{
-        ErrorCode, ErrorData, JsonRpcError, JsonRpcVersion2_0, RequestId,
-        ServerJsonRpcMessage,
+        ErrorCode, ErrorData, JsonRpcError, JsonRpcVersion2_0, RequestId, ServerJsonRpcMessage,
     },
     transport::{IntoTransport, Transport},
 };
@@ -18,8 +17,7 @@ use rmcp::{
 #[tokio::test]
 async fn test_client_init_handles_jsonrpc_error() {
     let (server_transport, client_transport) = tokio::io::duplex(1024);
-    let mut server =
-        IntoTransport::<rmcp::RoleServer, _, _>::into_transport(server_transport);
+    let mut server = IntoTransport::<rmcp::RoleServer, _, _>::into_transport(server_transport);
 
     let client_handle = tokio::spawn(async move {
         TestClientHandler::new(true, true)

@@ -66,13 +66,10 @@ impl WasmToolExecutor {
                     let env_name = tool
                         .manifest
                         .get_credential_env_var(&credential_req.name)
-                        .unwrap_or_else(|| {
-                            credential_req.name.to_uppercase().replace('-', "_")
-                        });
+                        .unwrap_or_else(|| credential_req.name.to_uppercase().replace('-', "_"));
 
                     // Set the main credential value
-                    context =
-                        context.with_env(env_name.clone(), cred_value.to_env_value());
+                    context = context.with_env(env_name.clone(), cred_value.to_env_value());
 
                     // Set any additional environment variables (e.g., for BasicAuth)
                     for (key, value) in cred_value.additional_env_vars(&env_name) {
@@ -117,13 +114,12 @@ impl WasmToolExecutor {
             })?;
 
         // Parse the output as JSON
-        let output_json: serde_json::Value =
-            serde_json::from_slice(&output).map_err(|e| {
-                ErrorData::internal_error(
-                    format!("Tool '{}' produced invalid JSON output: {}", tool_name, e),
-                    None,
-                )
-            })?;
+        let output_json: serde_json::Value = serde_json::from_slice(&output).map_err(|e| {
+            ErrorData::internal_error(
+                format!("Tool '{}' produced invalid JSON output: {}", tool_name, e),
+                None,
+            )
+        })?;
 
         // Convert to CallToolResult
         // The tool should output a JSON object with optional "error" and "content" fields

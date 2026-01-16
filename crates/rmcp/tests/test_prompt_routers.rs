@@ -55,9 +55,7 @@ impl<T> TestHandler<T> {
 }
 
 #[rmcp::prompt]
-async fn async_function(
-    Parameters(Request { fields }): Parameters<Request>,
-) -> Vec<PromptMessage> {
+async fn async_function(Parameters(Request { fields }): Parameters<Request>) -> Vec<PromptMessage> {
     drop(fields);
     vec![PromptMessage::new_text(
         PromptMessageRole::Assistant,

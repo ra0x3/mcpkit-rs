@@ -51,12 +51,11 @@ async fn init() -> anyhow::Result<()> {
 async fn test_with_python_server() -> anyhow::Result<()> {
     init().await?;
 
-    let transport =
-        TokioChildProcess::new(tokio::process::Command::new("uv").configure(|cmd| {
-            cmd.arg("run")
-                .arg("server.py")
-                .current_dir("tests/test_with_python");
-        }))?;
+    let transport = TokioChildProcess::new(tokio::process::Command::new("uv").configure(|cmd| {
+        cmd.arg("run")
+            .arg("server.py")
+            .current_dir("tests/test_with_python");
+    }))?;
 
     let client = ().serve(transport).await?;
     let resources = client.list_all_resources().await?;

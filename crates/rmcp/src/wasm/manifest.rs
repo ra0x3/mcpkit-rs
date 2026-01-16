@@ -127,14 +127,9 @@ fn default_true() -> bool {
 
 impl WasmToolManifest {
     /// Load a manifest from a JSON file
-    pub fn from_file(
-        path: impl AsRef<std::path::Path>,
-    ) -> Result<Self, crate::wasm::WasmError> {
+    pub fn from_file(path: impl AsRef<std::path::Path>) -> Result<Self, crate::wasm::WasmError> {
         let content = std::fs::read_to_string(path.as_ref()).map_err(|e| {
-            crate::wasm::WasmError::ManifestError(format!(
-                "Failed to read manifest: {}",
-                e
-            ))
+            crate::wasm::WasmError::ManifestError(format!("Failed to read manifest: {}", e))
         })?;
 
         Self::from_json_str(&content)
@@ -143,10 +138,7 @@ impl WasmToolManifest {
     /// Parse a manifest from JSON string
     pub fn from_json_str(json: &str) -> Result<Self, crate::wasm::WasmError> {
         serde_json::from_str(json).map_err(|e| {
-            crate::wasm::WasmError::ManifestError(format!(
-                "Failed to parse manifest: {}",
-                e
-            ))
+            crate::wasm::WasmError::ManifestError(format!("Failed to parse manifest: {}", e))
         })
     }
 

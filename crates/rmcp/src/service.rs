@@ -6,9 +6,9 @@ use crate::model::ServerJsonRpcMessage;
 use crate::{
     error::ErrorData as McpError,
     model::{
-        CancelledNotification, CancelledNotificationParam, Extensions, GetExtensions,
-        GetMeta, JsonRpcError, JsonRpcMessage, JsonRpcNotification, JsonRpcRequest,
-        JsonRpcResponse, Meta, NumberOrString, ProgressToken, RequestId,
+        CancelledNotification, CancelledNotificationParam, Extensions, GetExtensions, GetMeta,
+        JsonRpcError, JsonRpcMessage, JsonRpcNotification, JsonRpcRequest, JsonRpcResponse, Meta,
+        NumberOrString, ProgressToken, RequestId,
     },
     transport::{DynamicTransportError, IntoTransport, Transport},
 };
@@ -50,13 +50,7 @@ pub enum ServiceError {
 }
 
 trait TransferObject:
-    std::fmt::Debug
-    + Clone
-    + serde::Serialize
-    + serde::de::DeserializeOwned
-    + Send
-    + Sync
-    + 'static
+    std::fmt::Debug + Clone + serde::Serialize + serde::de::DeserializeOwned + Send + Sync + 'static
 {
 }
 
@@ -91,11 +85,8 @@ pub trait ServiceRole: std::fmt::Debug + Send + Sync + 'static + Copy + Clone {
     type PeerInfo: TransferObject;
 }
 
-pub type TxJsonRpcMessage<R> = JsonRpcMessage<
-    <R as ServiceRole>::Req,
-    <R as ServiceRole>::Resp,
-    <R as ServiceRole>::Not,
->;
+pub type TxJsonRpcMessage<R> =
+    JsonRpcMessage<<R as ServiceRole>::Req, <R as ServiceRole>::Resp, <R as ServiceRole>::Not>;
 pub type RxJsonRpcMessage<R> = JsonRpcMessage<
     <R as ServiceRole>::PeerReq,
     <R as ServiceRole>::PeerResp,
@@ -362,18 +353,13 @@ impl<R: ServiceRole> Peer<R> {
             Self {
                 tx,
                 request_id_provider,
-                progress_token_provider: Arc::new(
-                    AtomicU32ProgressTokenProvider::default(),
-                ),
+                progress_token_provider: Arc::new(AtomicU32ProgressTokenProvider::default()),
                 info: Arc::new(tokio::sync::OnceCell::new_with(peer_info)),
             },
             rx,
         )
     }
-    pub async fn send_notification(
-        &self,
-        notification: R::Not,
-    ) -> Result<(), ServiceError> {
+    pub async fn send_notification(&self, notification: R::Not) -> Result<(), ServiceError> {
         let (responder, receiver) = tokio::sync::oneshot::channel();
         self.tx
             .send(PeerSinkMessage::Notification {
@@ -384,10 +370,7 @@ impl<R: ServiceRole> Peer<R> {
             .map_err(|_m| ServiceError::TransportClosed)?;
         receiver.await.map_err(|_e| ServiceError::TransportClosed)?
     }
-    pub async fn send_request(
-        &self,
-        request: R::Req,
-    ) -> Result<R::PeerResp, ServiceError> {
+    pub async fn send_request(&self, request: R::Req) -> Result<R::PeerResp, ServiceError> {
         self.send_request_with_option(request, PeerRequestOptions::no_options())
             .await?
             .await_response()
@@ -561,8 +544,7 @@ impl<R: ServiceRole, S: Service<R>> RunningService<R, S> {
     /// closed. For a non-consuming alternative, see [`close`](Self::close).
     pub async fn cancel(mut self) -> Result<QuitReason, tokio::task::JoinError> {
         // Disarm the drop guard since we're handling cancellation explicitly
-        let _ =
-            std::mem::replace(&mut self.dg, self.cancellation_token.clone().drop_guard());
+        let _ = std::mem::replace(&mut self.dg, self.cancellation_token.clone().drop_guard());
         self.close().await
     }
 }
@@ -645,8 +627,7 @@ where
     T: IntoTransport<R, E, A>,
     E: std::error::Error + Send + Sync + 'static,
 {
-    let (peer, peer_rx) =
-        Peer::new(Arc::new(AtomicU32RequestIdProvider::default()), peer_info);
+    let (peer, peer_rx) = Peer::new(Arc::new(AtomicU32RequestIdProvider::default()), peer_info);
     serve_inner(service, transport.into_transport(), peer, peer_rx, ct)
 }
 

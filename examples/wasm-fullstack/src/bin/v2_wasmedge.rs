@@ -247,7 +247,10 @@ impl FullStackServerV2 {
             param_count += 1;
         }
 
-        query.push_str(&format!(" WHERE id = ${} RETURNING id, user_id, title, completed, created_at, updated_at", param_count));
+        query.push_str(&format!(
+            " WHERE id = ${} RETURNING id, user_id, title, completed, created_at, updated_at",
+            param_count
+        ));
         params.push(Box::new(req.id));
 
         let params_refs: Vec<&(dyn tokio_postgres::types::ToSql + Sync)> =
@@ -334,9 +337,7 @@ impl FullStackServerV2 {
                         map.insert(column.to_string(), json!(val));
                     } else if let Ok(val) = row.try_get::<_, bool>(i) {
                         map.insert(column.to_string(), json!(val));
-                    } else if let Ok(val) =
-                        row.try_get::<_, chrono::DateTime<chrono::Utc>>(i)
-                    {
+                    } else if let Ok(val) = row.try_get::<_, chrono::DateTime<chrono::Utc>>(i) {
                         map.insert(column.to_string(), json!(val.to_rfc3339()));
                     } else {
                         map.insert(column.to_string(), json!(null));
@@ -409,9 +410,7 @@ impl FullStackServerV2 {
         .map_err(|e| e.to_string())
     }
 
-    #[tool(
-        description = "[Network I/O - HTTP] Fetch todos from external JSONPlaceholder API"
-    )]
+    #[tool(description = "[Network I/O - HTTP] Fetch todos from external JSONPlaceholder API")]
     async fn fetch_external_api(&self) -> Result<String, String> {
         // This would use reqwest with WasmEdge's HTTP support
         // For now, we'll simulate it
@@ -494,8 +493,7 @@ impl FullStackServerV2 {
             .open(wal_path)
             .map_err(|e| format!("Failed to open WAL: {}", e))?;
 
-        writeln!(file, "{}", wal_entry)
-            .map_err(|e| format!("Failed to write WAL: {}", e))?;
+        writeln!(file, "{}", wal_entry).map_err(|e| format!("Failed to write WAL: {}", e))?;
 
         Ok(())
     }
@@ -573,7 +571,8 @@ impl ServerHandler for FullStackServerV2 {
             name: "wasm-fullstack-v2-wasmedge".to_string(),
             version: env!("CARGO_PKG_VERSION").to_string(),
             description: Some(
-                "Full-Stack Server v2 - Real PostgreSQL with WasmEdge (TCP sockets + HTTP)".to_string(),
+                "Full-Stack Server v2 - Real PostgreSQL with WasmEdge (TCP sockets + HTTP)"
+                    .to_string(),
             ),
         }
     }

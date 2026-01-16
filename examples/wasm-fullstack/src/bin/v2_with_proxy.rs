@@ -109,18 +109,20 @@ impl FullStackServerV2 {
         // Fallback for demo purposes - returns mock data
         // In production with WasmEdge, remove this fallback
         match path {
-            "/todos" if method == "GET" => {
-                Ok(json!([
-                    {
-                        "id": "todo-db-1",
-                        "user_id": 1,
-                        "title": "Database Todo 1 (mock)",
-                        "completed": false,
-                        "created_at": "2024-01-01T00:00:00Z"
-                    }
-                ]).to_string())
-            }
-            _ => Err("Network not available in standard WASI - use WasmEdge for real networking".to_string())
+            "/todos" if method == "GET" => Ok(json!([
+                {
+                    "id": "todo-db-1",
+                    "user_id": 1,
+                    "title": "Database Todo 1 (mock)",
+                    "completed": false,
+                    "created_at": "2024-01-01T00:00:00Z"
+                }
+            ])
+            .to_string()),
+            _ => Err(
+                "Network not available in standard WASI - use WasmEdge for real networking"
+                    .to_string(),
+            ),
         }
     }
 }
@@ -141,8 +143,8 @@ impl FullStackServerV2 {
         let response = self.http_request("GET", &path, None).await?;
 
         // Parse and return response
-        let todos: Vec<Todo> = serde_json::from_str(&response)
-            .map_err(|e| format!("Failed to parse todos: {}", e))?;
+        let todos: Vec<Todo> =
+            serde_json::from_str(&response).map_err(|e| format!("Failed to parse todos: {}", e))?;
 
         serde_json::to_string_pretty(&json!({
             "todos": todos,

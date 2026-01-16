@@ -145,18 +145,16 @@ impl WasmRuntime {
         // Enable fuel metering for execution limits
         config.consume_fuel(true);
 
-        let engine = Engine::new(&config).map_err(|e| {
-            WasmError::RuntimeError(format!("Failed to create engine: {}", e))
-        })?;
+        let engine = Engine::new(&config)
+            .map_err(|e| WasmError::RuntimeError(format!("Failed to create engine: {}", e)))?;
 
         Ok(Self { engine })
     }
 
     /// Compile a WASM module
     pub fn compile_module(&self, wasm_bytes: &[u8]) -> Result<Module, WasmError> {
-        Module::new(&self.engine, wasm_bytes).map_err(|e| {
-            WasmError::CompileError(format!("Failed to compile module: {}", e))
-        })
+        Module::new(&self.engine, wasm_bytes)
+            .map_err(|e| WasmError::CompileError(format!("Failed to compile module: {}", e)))
     }
 
     /// Execute a WASM module with the given context
@@ -190,11 +188,14 @@ impl WasmRuntime {
             // Create linker and add WASI preview 1 functions
             let mut linker = Linker::new(&engine);
             // For WASI preview 1 with modules (not components)
-            wasmtime_wasi::p1::add_to_linker_sync(&mut linker, |ctx: &mut WasiWithPipes| &mut ctx.wasi)
-                .map_err(|e| WasmError::RuntimeError(format!("Failed to link WASI: {}", e)))?;
+            wasmtime_wasi::p1::add_to_linker_sync(&mut linker, |ctx: &mut WasiWithPipes| {
+                &mut ctx.wasi
+            })
+            .map_err(|e| WasmError::RuntimeError(format!("Failed to link WASI: {}", e)))?;
 
             // Instantiate the module
-            let instance = linker.instantiate(&mut store, &module)
+            let instance = linker
+                .instantiate(&mut store, &module)
                 .map_err(|e| WasmError::RuntimeError(format!("Failed to instantiate: {}", e)))?;
 
             // Get the _start function (WASI convention)
@@ -219,7 +220,7 @@ impl WasmRuntime {
                     if let Some(trap) = e.downcast_ref::<wasmtime::Trap>() {
                         if trap.to_string().contains("fuel") {
                             return Err(WasmError::RuntimeError(
-                                "Execution exceeded fuel limit (possible DOS attempt)".to_string()
+                                "Execution exceeded fuel limit (possible DOS attempt)".to_string(),
                             ));
                         }
                     }

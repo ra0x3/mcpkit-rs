@@ -107,8 +107,7 @@ async fn test_with_js_streamable_http_client() -> anyhow::Result<()> {
             },
         );
     let router = axum::Router::new().nest_service("/mcp", service);
-    let tcp_listener =
-        tokio::net::TcpListener::bind(STREAMABLE_HTTP_BIND_ADDRESS).await?;
+    let tcp_listener = tokio::net::TcpListener::bind(STREAMABLE_HTTP_BIND_ADDRESS).await?;
 
     let handle = tokio::spawn({
         let ct = ct.clone();

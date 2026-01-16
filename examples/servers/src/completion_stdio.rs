@@ -365,14 +365,7 @@ impl ServerHandler for SqlQueryServer {
                             if let Some(operation) = context.get_argument("operation") {
                                 match operation.to_uppercase().as_str() {
                                     "SELECT" | "UPDATE" => {
-                                        vec![
-                                            "id",
-                                            "name",
-                                            "email",
-                                            "created_at",
-                                            "updated_at",
-                                            "*",
-                                        ]
+                                        vec!["id", "name", "email", "created_at", "updated_at", "*"]
                                     }
                                     _ => vec!["Not applicable for this operation"],
                                 }
@@ -389,12 +382,7 @@ impl ServerHandler for SqlQueryServer {
                             if let Some(operation) = context.get_argument("operation") {
                                 match operation.to_uppercase().as_str() {
                                     "INSERT" => {
-                                        vec![
-                                            "'John Doe'",
-                                            "'jane@example.com'",
-                                            "123",
-                                            "NOW()",
-                                        ]
+                                        vec!["'John Doe'", "'jane@example.com'", "123", "NOW()"]
                                     }
                                     _ => vec!["Not applicable for this operation"],
                                 }
@@ -439,17 +427,13 @@ impl ServerHandler for SqlQueryServer {
 async fn main() -> Result<()> {
     // Initialize tracing
     tracing_subscriber::fmt()
-        .with_env_filter(
-            EnvFilter::from_default_env().add_directive(tracing::Level::INFO.into()),
-        )
+        .with_env_filter(EnvFilter::from_default_env().add_directive(tracing::Level::INFO.into()))
         .init();
 
     println!("MCP SQL Query Builder with Smart Completion");
     println!("==========================================");
     println!();
-    println!(
-        "This server demonstrates argument_names() value with progressive completion:"
-    );
+    println!("This server demonstrates argument_names() value with progressive completion:");
     println!("1. Start with operation type (SELECT, INSERT, UPDATE, DELETE)");
     println!("2. Choose table name (users, orders, products)");
     println!("3. Only relevant fields appear based on your operation!");

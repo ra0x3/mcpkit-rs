@@ -146,9 +146,7 @@ impl TokioChildProcess {
         note = "use the Transport trait implementation instead"
     )]
     pub fn split(self) -> (TokioChildProcessOut, ChildStdin) {
-        unimplemented!(
-            "This method is deprecated, use the Transport trait implementation instead"
-        );
+        unimplemented!("This method is deprecated, use the Transport trait implementation instead");
     }
 }
 
@@ -215,9 +213,7 @@ impl Transport<RoleClient> for TokioChildProcess {
         self.transport.send(item)
     }
 
-    fn receive(
-        &mut self,
-    ) -> impl Future<Output = Option<RxJsonRpcMessage<RoleClient>>> + Send {
+    fn receive(&mut self) -> impl Future<Output = Option<RxJsonRpcMessage<RoleClient>>> + Send {
         self.transport.receive()
     }
 
@@ -257,8 +253,7 @@ mod tests {
         // Drop the child process
         drop(child_process);
         // Wait a moment to allow the cleanup task to run
-        tokio::time::sleep(std::time::Duration::from_secs(MAX_WAIT_ON_DROP_SECS + 1))
-            .await;
+        tokio::time::sleep(std::time::Duration::from_secs(MAX_WAIT_ON_DROP_SECS + 1)).await;
         // Check if the process is still running
         let status = Command::new("ps")
             .arg("-p")
@@ -291,8 +286,7 @@ mod tests {
         let id = id.unwrap();
         child_process.graceful_shutdown().await.unwrap();
         // Wait a moment to allow the cleanup task to run
-        tokio::time::sleep(std::time::Duration::from_secs(MAX_WAIT_ON_DROP_SECS + 1))
-            .await;
+        tokio::time::sleep(std::time::Duration::from_secs(MAX_WAIT_ON_DROP_SECS + 1)).await;
         // Check if the process is still running
         let status = Command::new("ps")
             .arg("-p")

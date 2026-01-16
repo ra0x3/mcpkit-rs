@@ -51,10 +51,7 @@ impl Server {
         name = "code-review",
         description = "Review code for best practices and issues."
     )]
-    pub async fn code_review(
-        &self,
-        params: Parameters<CodeReviewRequest>,
-    ) -> Vec<PromptMessage> {
+    pub async fn code_review(&self, params: Parameters<CodeReviewRequest>) -> Vec<PromptMessage> {
         vec![
             PromptMessage::new_text(
                 PromptMessageRole::User,
@@ -65,8 +62,7 @@ impl Server {
             ),
             PromptMessage::new_text(
                 PromptMessageRole::Assistant,
-                "I'll review this code for best practices and potential issues."
-                    .to_string(),
+                "I'll review this code for best practices and potential issues.".to_string(),
             ),
         ]
     }
@@ -238,10 +234,7 @@ impl OptionalSchemaTester {
 impl OptionalSchemaTester {
     // Dummy prompt function using the test schema as an aggregated parameter
     #[prompt(description = "A prompt to test optional schema generation")]
-    async fn test_optional(
-        &self,
-        _req: Parameters<OptionalFieldTestSchema>,
-    ) -> Vec<PromptMessage> {
+    async fn test_optional(&self, _req: Parameters<OptionalFieldTestSchema>) -> Vec<PromptMessage> {
         vec![PromptMessage::new_text(
             PromptMessageRole::Assistant,
             "Testing optional fields".to_string(),

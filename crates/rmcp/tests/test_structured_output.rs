@@ -3,9 +3,7 @@
 
 use rmcp::{
     Json, ServerHandler,
-    handler::server::{
-        router::tool::ToolRouter, tool::IntoCallToolResult, wrapper::Parameters,
-    },
+    handler::server::{router::tool::ToolRouter, tool::IntoCallToolResult, wrapper::Parameters},
     model::{CallToolResult, Content, Tool},
     tool, tool_handler, tool_router,
 };
@@ -73,10 +71,7 @@ impl TestServer {
 
     /// Tool that returns structured user info
     #[tool(name = "get-user", description = "Get user info")]
-    pub async fn get_user(
-        &self,
-        user_id: Parameters<String>,
-    ) -> Result<Json<UserInfo>, String> {
+    pub async fn get_user(&self, user_id: Parameters<String>) -> Result<Json<UserInfo>, String> {
         if user_id.0 == "123" {
             Ok(Json(UserInfo {
                 name: "Alice".to_string(),
@@ -185,8 +180,7 @@ async fn test_mutual_exclusivity_validation() {
         message: "Hello".into(),
     };
     // Test that content and structured_content can both be passed separately
-    let content_result =
-        CallToolResult::success(vec![Content::json(response.clone()).unwrap()]);
+    let content_result = CallToolResult::success(vec![Content::json(response.clone()).unwrap()]);
     let structured_result = CallToolResult::structured(json!({"message": "Hello"}));
 
     // Verify the validation
@@ -218,9 +212,7 @@ async fn test_structured_return_conversion() {
 
     let structured = Json(calc_result);
     let result: Result<CallToolResult, rmcp::ErrorData> =
-        rmcp::handler::server::tool::IntoCallToolResult::into_call_tool_result(
-            structured,
-        );
+        rmcp::handler::server::tool::IntoCallToolResult::into_call_tool_result(structured);
 
     assert!(result.is_ok());
     let call_result = result.unwrap();

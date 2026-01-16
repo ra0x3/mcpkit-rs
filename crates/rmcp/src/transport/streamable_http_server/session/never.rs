@@ -39,8 +39,7 @@ impl SessionManager for NeverSessionManager {
 
     fn create_session(
         &self,
-    ) -> impl Future<Output = Result<(SessionId, Self::Transport), Self::Error>> + Send
-    {
+    ) -> impl Future<Output = Result<(SessionId, Self::Transport), Self::Error>> + Send {
         futures::future::ready(Err(ErrorSessionManagementNotSupported))
     }
 
@@ -71,10 +70,7 @@ impl SessionManager for NeverSessionManager {
         _id: &SessionId,
         _message: ClientJsonRpcMessage,
     ) -> impl Future<
-        Output = Result<
-            impl Stream<Item = ServerSseMessage> + Send + 'static,
-            Self::Error,
-        >,
+        Output = Result<impl Stream<Item = ServerSseMessage> + Send + 'static, Self::Error>,
     > + Send {
         futures::future::ready(Result::<futures::stream::Pending<_>, _>::Err(
             ErrorSessionManagementNotSupported,
@@ -84,10 +80,7 @@ impl SessionManager for NeverSessionManager {
         &self,
         _id: &SessionId,
     ) -> impl Future<
-        Output = Result<
-            impl Stream<Item = ServerSseMessage> + Send + 'static,
-            Self::Error,
-        >,
+        Output = Result<impl Stream<Item = ServerSseMessage> + Send + 'static, Self::Error>,
     > + Send {
         futures::future::ready(Result::<futures::stream::Pending<_>, _>::Err(
             ErrorSessionManagementNotSupported,
@@ -98,10 +91,7 @@ impl SessionManager for NeverSessionManager {
         _id: &SessionId,
         _last_event_id: String,
     ) -> impl Future<
-        Output = Result<
-            impl Stream<Item = ServerSseMessage> + Send + 'static,
-            Self::Error,
-        >,
+        Output = Result<impl Stream<Item = ServerSseMessage> + Send + 'static, Self::Error>,
     > + Send {
         futures::future::ready(Result::<futures::stream::Pending<_>, _>::Err(
             ErrorSessionManagementNotSupported,

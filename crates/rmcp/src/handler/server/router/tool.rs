@@ -56,8 +56,7 @@ impl<S: Send + Sync + 'static> ToolRoute<S> {
     where
         C: for<'a> Fn(
                 ToolCallContext<'a, S>,
-            )
-                -> BoxFuture<'a, Result<CallToolResult, crate::ErrorData>>
+            ) -> BoxFuture<'a, Result<CallToolResult, crate::ErrorData>>
             + Send
             + Sync
             + 'static,
@@ -205,8 +204,7 @@ impl<S> Clone for ToolRouter<S> {
 
 impl<S> IntoIterator for ToolRouter<S> {
     type Item = ToolRoute<S>;
-    type IntoIter =
-        std::collections::hash_map::IntoValues<Cow<'static, str>, ToolRoute<S>>;
+    type IntoIter = std::collections::hash_map::IntoValues<Cow<'static, str>, ToolRoute<S>>;
 
     fn into_iter(self) -> Self::IntoIter {
         self.map.into_values()

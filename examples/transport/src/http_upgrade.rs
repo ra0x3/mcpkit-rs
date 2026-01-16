@@ -11,9 +11,7 @@ mod common;
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt()
-        .with_env_filter(
-            EnvFilter::from_default_env().add_directive(tracing::Level::INFO.into()),
-        )
+        .with_env_filter(EnvFilter::from_default_env().add_directive(tracing::Level::INFO.into()))
         .init();
     start_server().await?;
     let client = http_client("127.0.0.1:8001").await?;
@@ -23,9 +21,7 @@ async fn main() -> anyhow::Result<()> {
     Ok(())
 }
 
-async fn http_server(
-    req: Request<Incoming>,
-) -> Result<hyper::Response<String>, hyper::Error> {
+async fn http_server(req: Request<Incoming>) -> Result<hyper::Response<String>, hyper::Error> {
     tokio::spawn(async move {
         let upgraded = hyper::upgrade::on(req).await?;
         let service = Calculator::new().serve(TokioIo::new(upgraded)).await?;
@@ -43,8 +39,7 @@ async fn http_server(
 async fn http_client(uri: &str) -> anyhow::Result<RunningService<RoleClient, ()>> {
     let tcp_stream = tokio::net::TcpStream::connect(uri).await?;
     let (mut s, c) =
-        hyper::client::conn::http1::handshake::<_, String>(TokioIo::new(tcp_stream))
-            .await?;
+        hyper::client::conn::http1::handshake::<_, String>(TokioIo::new(tcp_stream)).await?;
     tokio::spawn(c.with_upgrades());
     let mut req = Request::new(String::new());
     req.headers_mut()

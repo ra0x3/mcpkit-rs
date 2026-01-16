@@ -53,8 +53,7 @@ pub fn schema_for_type<T: JsonSchema + std::any::Any>() -> Arc<JsonObject> {
 
 /// Generate and validate a JSON schema for outputSchema (must have root type "object").
 #[cfg(feature = "schemars")]
-pub fn schema_for_output<T: JsonSchema + std::any::Any>()
--> Result<Arc<JsonObject>, String> {
+pub fn schema_for_output<T: JsonSchema + std::any::Any>() -> Result<Arc<JsonObject>, String> {
     thread_local! {
         static CACHE_FOR_OUTPUT: std::sync::RwLock<HashMap<TypeId, Result<Arc<JsonObject>, String>>> = Default::default();
     };

@@ -9,9 +9,7 @@ use super::{WasmToolExecutor, WasmToolRegistry};
 use crate::{
     ErrorData,
     handler::server::ServerHandler,
-    model::{
-        CallToolRequestParam, CallToolResult, ListToolsResult, PaginatedRequestParam,
-    },
+    model::{CallToolRequestParam, CallToolResult, ListToolsResult, PaginatedRequestParam},
     service::{RequestContext, RoleServer},
 };
 

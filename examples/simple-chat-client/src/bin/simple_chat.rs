@@ -59,9 +59,10 @@ async fn main() -> Result<()> {
             }
 
             // create openai client
-            let api_key = config.openai_key.clone().unwrap_or_else(|| {
-                std::env::var("OPENAI_API_KEY").expect("need set api key")
-            });
+            let api_key = config
+                .openai_key
+                .clone()
+                .unwrap_or_else(|| std::env::var("OPENAI_API_KEY").expect("need set api key"));
             let url = config.chat_url.clone();
             println!("use api address: {:?}", url);
             let openai_client = Arc::new(OpenAIClient::new(api_key, url, config.proxy));
@@ -123,8 +124,7 @@ async fn main() -> Result<()> {
                 println!("system prompt: {}", system_prompt);
             } else {
                 system_prompt =
-                    "you are a assistant, you can help user to complete various tasks."
-                        .to_string();
+                    "you are a assistant, you can help user to complete various tasks.".to_string();
             }
 
             // add system prompt

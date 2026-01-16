@@ -14,9 +14,7 @@ impl<H: ClientHandler> Service<RoleClient> for H {
         context: RequestContext<RoleClient>,
     ) -> Result<<RoleClient as ServiceRole>::Resp, McpError> {
         match request {
-            ServerRequest::PingRequest(_) => {
-                self.ping(context).await.map(ClientResult::empty)
-            }
+            ServerRequest::PingRequest(_) => self.ping(context).await.map(ClientResult::empty),
             ServerRequest::CreateMessageRequest(request) => self
                 .create_message(request.params, context)
                 .await
@@ -55,9 +53,9 @@ impl<H: ClientHandler> Service<RoleClient> for H {
             ServerNotification::ResourceUpdatedNotification(notification) => {
                 self.on_resource_updated(notification.params, context).await
             }
-            ServerNotification::ResourceListChangedNotification(
-                _notification_no_param,
-            ) => self.on_resource_list_changed(context).await,
+            ServerNotification::ResourceListChangedNotification(_notification_no_param) => {
+                self.on_resource_list_changed(context).await
+            }
             ServerNotification::ToolListChangedNotification(_notification_no_param) => {
                 self.on_tool_list_changed(context).await
             }

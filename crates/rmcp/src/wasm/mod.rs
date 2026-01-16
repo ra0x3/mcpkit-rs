@@ -13,9 +13,7 @@ pub mod runtime;
 
 pub use credentials::{CredentialProvider, CredentialValue};
 pub use executor::WasmToolExecutor;
-pub use integration::{
-    CompositeToolHandler, WasmToolHandler, load_wasm_tools_from_directory,
-};
+pub use integration::{CompositeToolHandler, WasmToolHandler, load_wasm_tools_from_directory};
 pub use loader::{LoadedWasmTool, WasmToolRegistry};
 pub use manifest::{CredentialRequirement, CredentialType, WasmToolManifest};
 pub use runtime::{WasmContext, WasmRuntime};

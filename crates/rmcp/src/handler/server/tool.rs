@@ -22,9 +22,7 @@ use crate::{
 };
 
 /// Deserialize a JSON object into a type
-pub fn parse_json_object<T: DeserializeOwned>(
-    input: JsonObject,
-) -> Result<T, crate::ErrorData> {
+pub fn parse_json_object<T: DeserializeOwned>(input: JsonObject) -> Result<T, crate::ErrorData> {
     serde_json::from_value(serde_json::Value::Object(input)).map_err(|e| {
         crate::ErrorData::invalid_params(
             format!("failed to deserialize parameters: {error}", error = e),
@@ -153,9 +151,7 @@ pub trait CallToolHandler<S, A> {
     ) -> BoxFuture<'_, Result<CallToolResult, crate::ErrorData>>;
 }
 
-pub type DynCallToolHandler<S> = dyn for<'s> Fn(
-        ToolCallContext<'s, S>,
-    ) -> BoxFuture<'s, Result<CallToolResult, crate::ErrorData>>
+pub type DynCallToolHandler<S> = dyn for<'s> Fn(ToolCallContext<'s, S>) -> BoxFuture<'s, Result<CallToolResult, crate::ErrorData>>
     + Send
     + Sync;
 
@@ -163,9 +159,7 @@ pub type DynCallToolHandler<S> = dyn for<'s> Fn(
 pub struct ToolName(pub Cow<'static, str>);
 
 impl<S> FromContextPart<ToolCallContext<'_, S>> for ToolName {
-    fn from_context_part(
-        context: &mut ToolCallContext<S>,
-    ) -> Result<Self, crate::ErrorData> {
+    fn from_context_part(context: &mut ToolCallContext<S>) -> Result<Self, crate::ErrorData> {
         Ok(Self(context.name.clone()))
     }
 }
@@ -175,12 +169,10 @@ impl<S, P> FromContextPart<ToolCallContext<'_, S>> for Parameters<P>
 where
     P: DeserializeOwned,
 {
-    fn from_context_part(
-        context: &mut ToolCallContext<S>,
-    ) -> Result<Self, crate::ErrorData> {
+    fn from_context_part(context: &mut ToolCallContext<S>) -> Result<Self, crate::ErrorData> {
         let arguments = context.arguments.take().unwrap_or_default();
-        let value: P = serde_json::from_value(serde_json::Value::Object(arguments))
-            .map_err(|e| {
+        let value: P =
+            serde_json::from_value(serde_json::Value::Object(arguments)).map_err(|e| {
                 crate::ErrorData::invalid_params(
                     format!("failed to deserialize parameters: {error}", error = e),
                     None,
@@ -192,19 +184,14 @@ where
 
 // Special implementation for JsonObject that takes tool arguments
 impl<S> FromContextPart<ToolCallContext<'_, S>> for JsonObject {
-    fn from_context_part(
-        context: &mut ToolCallContext<S>,
-    ) -> Result<Self, crate::ErrorData> {
+    fn from_context_part(context: &mut ToolCallContext<S>) -> Result<Self, crate::ErrorData> {
         let object = context.arguments.take().unwrap_or_default();
         Ok(object)
     }
 }
 
 impl<'s, S> ToolCallContext<'s, S> {
-    pub fn invoke<H, A>(
-        self,
-        h: H,
-    ) -> BoxFuture<'s, Result<CallToolResult, crate::ErrorData>>
+    pub fn invoke<H, A>(self, h: H) -> BoxFuture<'s, Result<CallToolResult, crate::ErrorData>>
     where
         H: CallToolHandler<S, A>,
     {
@@ -453,14 +440,11 @@ mod tests {
             value: "test".to_string(),
         };
         let request_context = RequestContext {
-            peer:
-                crate::service::Peer::new(
-                    std::sync::Arc::new(
-                        crate::service::AtomicU32RequestIdProvider::default(),
-                    ),
-                    None,
-                )
-                .0,
+            peer: crate::service::Peer::new(
+                std::sync::Arc::new(crate::service::AtomicU32RequestIdProvider::default()),
+                None,
+            )
+            .0,
             ct: CancellationToken::new(),
             id: NumberOrString::Number(1),
             meta: Default::default(),
@@ -491,14 +475,11 @@ mod tests {
         args.insert("count".to_string(), json!(42));
 
         let request_context = RequestContext {
-            peer:
-                crate::service::Peer::new(
-                    std::sync::Arc::new(
-                        crate::service::AtomicU32RequestIdProvider::default(),
-                    ),
-                    None,
-                )
-                .0,
+            peer: crate::service::Peer::new(
+                std::sync::Arc::new(crate::service::AtomicU32RequestIdProvider::default()),
+                None,
+            )
+            .0,
             ct: CancellationToken::new(),
             id: NumberOrString::Number(1),
             meta: Default::default(),
@@ -515,8 +496,7 @@ mod tests {
             request_context,
         );
 
-        let params: Parameters<TestParams> =
-            Parameters::from_context_part(&mut context).unwrap();
+        let params: Parameters<TestParams> = Parameters::from_context_part(&mut context).unwrap();
         assert_eq!(params.0.message, "hello");
         assert_eq!(params.0.count, 42);
         // Arguments should be consumed
@@ -530,14 +510,11 @@ mod tests {
         };
 
         let request_context = RequestContext {
-            peer:
-                crate::service::Peer::new(
-                    std::sync::Arc::new(
-                        crate::service::AtomicU32RequestIdProvider::default(),
-                    ),
-                    None,
-                )
-                .0,
+            peer: crate::service::Peer::new(
+                std::sync::Arc::new(crate::service::AtomicU32RequestIdProvider::default()),
+                None,
+            )
+            .0,
             ct: CancellationToken::new(),
             id: NumberOrString::Number(1),
             meta: Default::default(),
@@ -573,14 +550,11 @@ mod tests {
         args.insert("count".to_string(), json!(3));
 
         let request_context = RequestContext {
-            peer:
-                crate::service::Peer::new(
-                    std::sync::Arc::new(
-                        crate::service::AtomicU32RequestIdProvider::default(),
-                    ),
-                    None,
-                )
-                .0,
+            peer: crate::service::Peer::new(
+                std::sync::Arc::new(crate::service::AtomicU32RequestIdProvider::default()),
+                None,
+            )
+            .0,
             ct: CancellationToken::new(),
             id: NumberOrString::Number(1),
             meta: Default::default(),
@@ -622,14 +596,11 @@ mod tests {
         args.insert("count".to_string(), json!(5));
 
         let request_context = RequestContext {
-            peer:
-                crate::service::Peer::new(
-                    std::sync::Arc::new(
-                        crate::service::AtomicU32RequestIdProvider::default(),
-                    ),
-                    None,
-                )
-                .0,
+            peer: crate::service::Peer::new(
+                std::sync::Arc::new(crate::service::AtomicU32RequestIdProvider::default()),
+                None,
+            )
+            .0,
             ct: CancellationToken::new(),
             id: NumberOrString::Number(1),
             meta: Default::default(),
@@ -671,14 +642,11 @@ mod tests {
         args.insert("count".to_string(), json!(1));
 
         let request_context = RequestContext {
-            peer:
-                crate::service::Peer::new(
-                    std::sync::Arc::new(
-                        crate::service::AtomicU32RequestIdProvider::default(),
-                    ),
-                    None,
-                )
-                .0,
+            peer: crate::service::Peer::new(
+                std::sync::Arc::new(crate::service::AtomicU32RequestIdProvider::default()),
+                None,
+            )
+            .0,
             ct: CancellationToken::new(),
             id: NumberOrString::Number(1),
             meta: Default::default(),
@@ -725,14 +693,11 @@ mod tests {
         args.insert("count".to_string(), json!(10));
 
         let request_context = RequestContext {
-            peer:
-                crate::service::Peer::new(
-                    std::sync::Arc::new(
-                        crate::service::AtomicU32RequestIdProvider::default(),
-                    ),
-                    None,
-                )
-                .0,
+            peer: crate::service::Peer::new(
+                std::sync::Arc::new(crate::service::AtomicU32RequestIdProvider::default()),
+                None,
+            )
+            .0,
             ct: CancellationToken::new(),
             id: NumberOrString::Number(1),
             meta: Default::default(),
