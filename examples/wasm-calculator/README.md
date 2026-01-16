@@ -1,10 +1,21 @@
 # WASI Calculator Example
 
-A simple calculator MCP server demonstrating WASI compilation and cross-platform compatibility.
+![WASI Logo](https://i.imgur.com/601iemy.png)
+
+A simple calculator MCP server demonstrating WASI compilation and cross-platform compatibility using **Wasmtime** as the WASI runtime.
+
+## Runtime: Wasmtime
+
+This example uses [Wasmtime](https://wasmtime.dev/), a standalone WebAssembly runtime with full WASI Preview2 support. Wasmtime provides:
+- Standard WASI filesystem access
+- Environment variables
+- Standard I/O streams (stdin/stdout/stderr)
+- Clock and random number generation
+- **Note**: No networking support (standard WASI limitation)
 
 ## Overview
 
-This example shows how to build MCP servers as WebAssembly modules that run anywhere with a WASI runtime. The calculator provides basic arithmetic operations through the MCP protocol.
+This example shows how to build MCP servers as WebAssembly modules that run anywhere with a WASI runtime. The calculator provides basic arithmetic operations through the MCP protocol over stdio.
 
 ## Features
 
