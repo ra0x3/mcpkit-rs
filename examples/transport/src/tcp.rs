@@ -1,5 +1,5 @@
 use common::calculator::Calculator;
-use rmcp::{serve_client, serve_server};
+use mcpkit_rs::{serve_client, serve_server};
 
 mod common;
 #[tokio::main]

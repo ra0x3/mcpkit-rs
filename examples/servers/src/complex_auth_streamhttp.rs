@@ -11,12 +11,17 @@ use axum::{
     response::{Html, IntoResponse, Redirect, Response},
     routing::{get, post},
 };
+<<<<<<< HEAD
 use rand::{RngExt, distr::Alphanumeric};
 use rmcp::transport::{
+=======
+use mcpkit_rs::transport::{
+>>>>>>> 8b8238d (feat: rename + restructure project for extensions)
     StreamableHttpServerConfig,
     auth::{AuthorizationMetadata, ClientRegistrationResponse, OAuthClientConfig},
     streamable_http_server::{session::local::LocalSessionManager, tower::StreamableHttpService},
 };
+use rand::{Rng, distr::Alphanumeric};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use tokio::sync::RwLock;

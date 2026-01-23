@@ -5,7 +5,7 @@
 use std::sync::Arc;
 
 use anyhow::Result;
-use rmcp::{
+use mcpkit_rs::{
     ErrorData as McpError, ServerHandler, ServiceExt, elicit_safe,
     handler::server::{router::tool::ToolRouter, wrapper::Parameters},
     model::*,

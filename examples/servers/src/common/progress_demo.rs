@@ -5,7 +5,7 @@ use std::{
 };
 
 use futures::Stream;
-use rmcp::{
+use mcpkit_rs::{
     ErrorData as McpError, RoleServer, ServerHandler, handler::server::tool::ToolRouter, model::*,
     service::RequestContext, tool, tool_handler, tool_router,
 };

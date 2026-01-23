@@ -13,12 +13,17 @@ use axum::{
     response::{Html, IntoResponse, Redirect, Response},
     routing::{get, post},
 };
+<<<<<<< HEAD
 use rand::{RngExt, distr::Alphanumeric};
 use rmcp::transport::{
+=======
+use mcpkit_rs::transport::{
+>>>>>>> 8b8238d (feat: rename + restructure project for extensions)
     StreamableHttpServerConfig,
     streamable_http_server::{session::local::LocalSessionManager, tower::StreamableHttpService},
 };
-use serde::{Deserialize, Serialize};
+use rand::{Rng, distr::Alphanumeric};
+use serde::Deserialize;
 use serde_json::Value;
 use tokio::sync::RwLock;
 use tower_http::cors::{Any, CorsLayer};
@@ -35,7 +40,9 @@ const BIND_ADDRESS: &str = "127.0.0.1:3000";
 /// In-memory authorization code record
 #[derive(Clone, Debug)]
 struct AuthCodeRecord {
+    #[allow(dead_code)]
     client_id: String,
+    #[allow(dead_code)]
     redirect_uri: String,
     expires_at: SystemTime,
 }

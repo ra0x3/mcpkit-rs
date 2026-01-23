@@ -6,6 +6,15 @@ on:
     tags:
       - 'release-*'
   pull_request:
+  release:
+    types:
+      - published
+  workflow_dispatch:
+    inputs:
+      test-release:
+        description: "Simulate a release"
+        required: false
+        default: "true"
 
 # Cancel in-progress workflows when a new commit is pushed to the same branch
 concurrency:
@@ -82,7 +91,7 @@ jobs:
 
       - name: Generate documentation
         run: |
-          cargo +nightly doc --no-deps -p rmcp -p rmcp-macros --all-features
+          cargo +nightly doc --no-deps -p mcpkit_rs -p mcpkit_rs_macros --all-features
         env:
           RUSTDOCFLAGS: --cfg docsrs -Dwarnings
 
@@ -261,6 +270,7 @@ jobs:
 
       - name: Build examples
         run: |
+          # Build direct examples
           for dir in examples/*/ ; do
             if [ -f "$dir/Cargo.toml" ]; then
               echo "Building $dir"
@@ -269,9 +279,14 @@ jobs:
                 echo "Skipping rig-integration (excluded from workspace)"
                 continue
               fi
-              # Skip wasm-fullstack as it requires WasmEdge-specific patches
-              if [[ "$dir" == *"wasm-fullstack"* ]]; then
-                echo "Skipping wasm-fullstack (requires WasmEdge runtime with special patches)"
+              # Skip wasm directories as they contain subdirectories, not direct crates
+              if [[ "$dir" == *"examples/wasm/"* ]]; then
+                echo "Skipping wasm directory (not a crate)"
+                continue
+              fi
+              # Skip wasmedge fullstack as it requires WasmEdge-specific patches
+              if [[ "$dir" == *"wasmedge/fullstack"* ]]; then
+                echo "Skipping wasmedge/fullstack (requires WasmEdge runtime with special patches)"
                 continue
               fi
               if [[ "$dir" == *"wasi"* ]] || [[ "$dir" == *"wasm"* ]]; then
@@ -281,6 +296,12 @@ jobs:
               fi
             fi
           done
+
+          # Build wasmtime calculator example
+          if [ -f "examples/wasm/wasmtime/calculator/Cargo.toml" ]; then
+            echo "Building wasmtime calculator example"
+            cargo build --manifest-path "examples/wasm/wasmtime/calculator/Cargo.toml" --target wasm32-wasip2
+          fi
 
       - name: Run tests in examples
         run: |
@@ -353,6 +374,43 @@ jobs:
           fi
           echo "All required jobs succeeded!"
 
+  # Cargo publish job - runs after coverage on release events
+  cargo-publish:
+    name: Publish to crates.io
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' && github.event.action == 'published' || github.event_name == 'workflow_dispatch'
+    needs: [coverage]
+    environment: ci
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Publish mcpkit_rs_macros
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CRATESIO_TOKEN }}
+        run: |
+          if [ "${{ github.event.inputs.test-release }}" == "true" ]; then
+            cargo publish -p mcpkit_rs_macros --dry-run --locked --no-verify
+          else
+            cargo publish -p mcpkit_rs_macros --locked --no-verify
+          fi
+
+      - name: Wait for crates.io to index
+        run: sleep 30
+
+      - name: Publish mcpkit_rs
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CRATESIO_TOKEN }}
+        run: |
+          if [ "${{ github.event.inputs.test-release }}" == "true" ]; then
+            cargo publish -p mcpkit_rs --dry-run --locked --no-verify
+          else
+            cargo publish -p mcpkit_rs --locked --no-verify
+          fi
+
   # Release job (unchanged)
   release:
     name: Release crates
@@ -378,19 +436,19 @@ jobs:
         run: cargo login ${{ secrets.CRATES_TOKEN }}
 
       - name: Publish macros dry run
-        run: cargo publish -p rmcp-macros --dry-run
+        run: cargo publish -p mcpkit_rs_macros --dry-run
         continue-on-error: true
 
-      - name: Publish rmcp dry run
-        run: cargo publish -p rmcp --dry-run
+      - name: Publish mcpkit_rs dry run
+        run: cargo publish -p mcpkit_rs --dry-run
         continue-on-error: true
 
       - name: Publish macro
         if: ${{ startsWith(github.ref, 'refs/tags/release') }}
         continue-on-error: true
-        run: cargo publish -p rmcp-macros
+        run: cargo publish -p mcpkit_rs_macros
 
-      - name: Publish rmcp
+      - name: Publish mcpkit_rs
         if: ${{ startsWith(github.ref, 'refs/tags/release') }}
         continue-on-error: true
-        run: cargo publish -p rmcp
+        run: cargo publish -p mcpkit_rs

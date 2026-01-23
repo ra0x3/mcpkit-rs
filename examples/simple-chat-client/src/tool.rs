@@ -2,7 +2,7 @@ use std::{collections::HashMap, sync::Arc};
 
 use anyhow::Result;
 use async_trait::async_trait;
-use rmcp::{
+use mcpkit_rs::{
     model::{CallToolRequestParams, CallToolResult, Tool as McpTool},
     service::{RunningService, ServerSink},
     RoleClient,

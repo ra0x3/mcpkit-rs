@@ -1,4 +1,4 @@
-use rmcp::{
+use mcpkit_rs::{
     RmcpError,
     model::CallToolRequestParams,
     service::ServiceExt,

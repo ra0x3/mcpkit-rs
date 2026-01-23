@@ -1,5 +1,5 @@
 use anyhow::Result;
-use rmcp::{
+use mcpkit_rs::{
     ServiceExt,
     model::{CallToolRequestParams, GetPromptRequestParams, ReadResourceRequestParams},
     object,

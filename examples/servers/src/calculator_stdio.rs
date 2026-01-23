@@ -1,6 +1,6 @@
 use anyhow::Result;
 use common::calculator::Calculator;
-use rmcp::{ServiceExt, transport::stdio};
+use mcpkit_rs::{ServiceExt, transport::stdio};
 use tracing_subscriber::{self, EnvFilter};
 mod common;
 

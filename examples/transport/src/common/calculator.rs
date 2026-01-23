@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-use rmcp::{
+use mcpkit_rs::{
     ServerHandler,
     handler::server::{
         router::tool::ToolRouter,

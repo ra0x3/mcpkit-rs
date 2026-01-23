@@ -18,7 +18,7 @@ use axum::{
     response::{Html, Response},
     routing::get,
 };
-use rmcp::transport::{
+use mcpkit_rs::transport::{
     StreamableHttpServerConfig,
     streamable_http_server::{session::local::LocalSessionManager, tower::StreamableHttpService},
 };

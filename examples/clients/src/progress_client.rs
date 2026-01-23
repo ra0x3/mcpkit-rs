@@ -5,7 +5,7 @@ use std::{
 
 use anyhow::Result;
 use clap::{Parser, ValueEnum};
-use rmcp::{
+use mcpkit_rs::{
     ClientHandler, ServiceExt,
     model::{
         CallToolRequestParams, ClientCapabilities, ClientInfo, Implementation,

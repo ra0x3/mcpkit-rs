@@ -13,22 +13,27 @@ readme = { workspace = true }
 publish = false
 
 [dependencies]
+anyhow = "1.0"
+futures = "0.3"
 rig-core = "0.28.0"
-tokio = { version = "1", features = ["full"] }
-rmcp = { workspace = true, features = [
+mcpkit_rs = { path = "../../crates/rmcp", version = "0.13.0", features = [
     "client",
     "transport-child-process",
     "transport-streamable-http-client-reqwest"
 ] }
-anyhow = "1.0"
-serde_json = "1"
 serde = { version = "1", features = ["derive"] }
+<<<<<<< HEAD
 toml = "1.0"
 futures = "0.3"
+=======
+serde_json = "1"
+tokio = { version = "1.45", features = ["full"] }
+toml = "0.9"
+>>>>>>> 8b8238d (feat: rename + restructure project for extensions)
 tracing = "0.1"
+tracing-appender = "0.2"
 tracing-subscriber = { version = "0.3", features = [
     "env-filter",
     "std",
     "fmt",
 ] }
-tracing-appender = "0.2"

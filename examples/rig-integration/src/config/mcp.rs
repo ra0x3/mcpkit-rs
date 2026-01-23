@@ -1,6 +1,6 @@
 use std::{collections::HashMap, process::Stdio};
 
-use rmcp::{RoleClient, ServiceExt, service::RunningService, transport::ConfigureCommandExt};
+use mcpkit_rs::{RoleClient, ServiceExt, service::RunningService, transport::ConfigureCommandExt};
 use serde::{Deserialize, Serialize};
 
 use crate::mcp_adaptor::McpManager;
@@ -62,7 +62,7 @@ impl McpServerTransportConfig {
         let client = match self {
             McpServerTransportConfig::Streamable { url } => {
                 let transport =
-                    rmcp::transport::StreamableHttpClientTransport::from_uri(url.to_string());
+                    mcpkit_rs::transport::StreamableHttpClientTransport::from_uri(url.to_string());
                 ().serve(transport).await?
             }
             McpServerTransportConfig::Stdio {
@@ -70,7 +70,7 @@ impl McpServerTransportConfig {
                 args,
                 envs,
             } => {
-                let transport = rmcp::transport::TokioChildProcess::new(
+                let transport = mcpkit_rs::transport::TokioChildProcess::new(
                     tokio::process::Command::new(command).configure(|cmd| {
                         cmd.args(args).envs(envs).stderr(Stdio::null());
                     }),

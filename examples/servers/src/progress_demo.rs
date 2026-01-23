@@ -1,6 +1,6 @@
 use std::env;
 
-use rmcp::{
+use mcpkit_rs::{
     ServiceExt,
     transport::{
         stdio,

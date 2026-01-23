@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use rmcp::{
+use mcpkit_rs::{
     ServerHandler,
     handler::server::{router::tool::ToolRouter, wrapper::Parameters},
     model::{ServerCapabilities, ServerInfo},
