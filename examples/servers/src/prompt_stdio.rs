@@ -11,7 +11,7 @@
 use std::sync::Arc;
 
 use anyhow::Result;
-use rmcp::{
+use mcpkit_rs::{
     ErrorData as McpError, RoleServer, ServerHandler, ServiceExt,
     handler::server::{router::prompt::PromptRouter, wrapper::Parameters},
     model::*,

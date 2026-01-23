@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use rig::tool::{ToolDyn as RigTool, ToolEmbeddingDyn, ToolSet};
-use rmcp::{
+use mcpkit_rs::{
     RoleClient,
     model::{CallToolRequestParams, CallToolResult, Tool as McpTool},
     service::{RunningService, ServerSink},

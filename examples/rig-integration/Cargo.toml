@@ -14,8 +14,7 @@ publish = false
 
 [dependencies]
 rig-core = "0.31.0"
-tokio = { version = "1", features = ["full"] }
-rmcp = { workspace = true, features = [
+mcpkit_rs = { workspace = true, features = [
     "client",
     "transport-child-process",
     "transport-streamable-http-client-reqwest"
@@ -25,10 +24,11 @@ serde_json = "1"
 serde = { version = "1", features = ["derive"] }
 toml = "1.0"
 futures = "0.3"
+tokio = { version = "1", features = ["full"] }
 tracing = "0.1"
+tracing-appender = "0.2"
 tracing-subscriber = { version = "0.3", features = [
     "env-filter",
     "std",
     "fmt",
 ] }
-tracing-appender = "0.2"

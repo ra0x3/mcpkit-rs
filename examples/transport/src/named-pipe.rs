@@ -4,7 +4,7 @@ mod common;
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     use common::calculator::Calculator;
-    use rmcp::{serve_client, serve_server};
+    use mcpkit_rs::{serve_client, serve_server};
     use tokio::net::windows::named_pipe::{ClientOptions, ServerOptions};
     const PIPE_NAME: &str = r"\\.\pipe\rmcp_example";
 
@@ -49,8 +49,8 @@ async fn main() -> anyhow::Result<()> {
             let result = client
                 .peer()
                 .call_tool(
-                    rmcp::model::CallToolRequestParams::new(sum_tool.name.clone()).with_arguments(
-                        rmcp::object!({
+                    mcpkit_rs::model::CallToolRequestParams::new(sum_tool.name.clone()).with_arguments(
+                        mcpkit_rs::object!({
                             "a": 10,
                             "b": 20
                         }),

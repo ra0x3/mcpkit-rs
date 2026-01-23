@@ -5,7 +5,7 @@
 //! - Automatically generate output schemas from Rust types
 //! - Handle both structured and unstructured tool outputs
 
-use rmcp::{
+use mcpkit_rs::{
     Json, ServiceExt,
     handler::server::{router::tool::ToolRouter, wrapper::Parameters},
     tool, tool_handler, tool_router,
@@ -47,7 +47,7 @@ pub struct StructuredOutputServer {
 }
 
 #[tool_handler(router = self.tool_router)]
-impl rmcp::ServerHandler for StructuredOutputServer {}
+impl mcpkit_rs::ServerHandler for StructuredOutputServer {}
 
 impl Default for StructuredOutputServer {
     fn default() -> Self {

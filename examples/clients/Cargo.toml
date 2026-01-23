@@ -1,5 +1,4 @@
 
-
 [package]
 name = "mcp-client-examples"
 version = "0.1.5"
@@ -11,9 +10,10 @@ anyhow = "1.0"
 axum = "0.8"
 clap = { version = "4.0", features = ["derive"] }
 futures = "0.3"
+
 rand = "0.10"
 reqwest = "0.13.2"
-rmcp = { workspace = true, features = [
+mcpkit_rs = { workspace = true, features = [
     "client",
     "reqwest",
     "transport-streamable-http-client-reqwest",
@@ -52,7 +52,6 @@ path = "src/auth/oauth_client.rs"
 [[example]]
 name = "clients_sampling_stdio"
 path = "src/sampling_stdio.rs"
-
 
 [[example]]
 name = "clients_progress_client"

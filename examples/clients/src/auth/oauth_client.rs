@@ -7,7 +7,7 @@ use axum::{
     response::Html,
     routing::get,
 };
-use rmcp::{
+use mcpkit_rs::{
     ServiceExt,
     model::ClientInfo,
     transport::{

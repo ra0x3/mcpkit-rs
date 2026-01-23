@@ -6,7 +6,7 @@ async fn main() -> anyhow::Result<()> {
     use std::fs;
 
     use common::calculator::Calculator;
-    use rmcp::{serve_client, serve_server};
+    use mcpkit_rs::{serve_client, serve_server};
     use tokio::net::{UnixListener, UnixStream};
 
     const SOCKET_PATH: &str = "/tmp/rmcp_example.sock";
@@ -47,8 +47,8 @@ async fn main() -> anyhow::Result<()> {
             let result = client
                 .peer()
                 .call_tool(
-                    rmcp::model::CallToolRequestParams::new(sum_tool.name.clone()).with_arguments(
-                        rmcp::object!({
+                    mcpkit_rs::model::CallToolRequestParams::new(sum_tool.name.clone()).with_arguments(
+                        mcpkit_rs::object!({
                             "a": 10,
                             "b": 20
                         }),
