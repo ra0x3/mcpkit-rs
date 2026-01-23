@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use anyhow::Result;
-use rmcp::{
+use mcpkit_rs::{
     ServerHandler, ServiceExt,
     model::*,
     service::{RequestContext, RoleServer},

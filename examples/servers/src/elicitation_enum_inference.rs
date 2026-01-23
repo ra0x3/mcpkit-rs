@@ -11,7 +11,7 @@ use std::{
     sync::Arc,
 };
 
-use rmcp::{
+use mcpkit_rs::{
     ErrorData as McpError, ServerHandler, elicit_safe,
     handler::server::router::tool::ToolRouter,
     model::*,
