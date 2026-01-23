@@ -1,9 +1,15 @@
-# mcpkit-rs
+<div align="center">
+  <h1 align="center">mcpkit-rs</h1>
+  <p><b>Fork of Rust MCP SDK optimized for Rust integration with WebAssembly runtime support</b></p>
 
-Fork of [Rust MCP SDK](https://github.com/modelcontextprotocol/rust-sdk) optimized for Rust integration with WebAssembly runtime support.
+[Quick Start](#quick-start) | [FAQ](https://github.com/ra0x3/mcpkit-rs/issues) | [Documentation](#resources) | [Releases](https://github.com/ra0x3/mcpkit-rs/releases) | [Contributing](docs/CONTRIBUTE.MD) | [Discord](https://discord.gg/microsoft-open-source)
+</div>
 
 [![Crates.io Version](https://img.shields.io/crates/v/rmcp)](https://crates.io/crates/rmcp)
 ![Coverage](docs/coverage.svg)
+
+> [!WARNING]
+> **Early Development**: This repository is not production ready yet. It is in early development and may change significantly.
 
 ## Overview
 
@@ -83,135 +89,7 @@ rmcp = { version = "0.13.0", features = ["server", "wasmedge"] }
 
 ## Quick Start
 
-### Minimal WASI Tool
-
-```rust
-use rmcp::{handler::server::ServerHandler, protocol::*, ServiceExt};
-use serde_json::Value;
-use tokio::io::{stdin, stdout};
-
-#[derive(Clone)]
-struct HelloTool;
-
-#[rmcp::async_trait]
-impl ServerHandler for HelloTool {
-    async fn list_tools(&self) -> ServerResult<ListToolsResponse> {
-        Ok(ListToolsResponse {
-            tools: vec![Tool {
-                name: "hello".into(),
-                description: Some("Greet someone".into()),
-                input_schema: serde_json::json!({
-                    "type": "object",
-                    "properties": {
-                        "name": { "type": "string" }
-                    },
-                    "required": ["name"]
-                }),
-            }],
-            ..Default::default()
-        })
-    }
-
-    async fn call_tool(&self, params: CallToolParams) -> ServerResult<CallToolResponse> {
-        if params.name == "hello" {
-            let name = params.arguments
-                .get("name")
-                .and_then(|v| v.as_str())
-                .unwrap_or("World");
-
-            Ok(CallToolResponse {
-                content: vec![Content::Text(TextContent {
-                    text: format!("Hello, {}!", name),
-                    annotations: None,
-                })],
-                ..Default::default()
-            })
-        } else {
-            Err(ServerError::MethodNotFound)
-        }
-    }
-}
-
-#[tokio::main(flavor = "current_thread")]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let transport = (stdin(), stdout());
-    let server = HelloTool.serve(transport).await?;
-    server.waiting().await?;
-    Ok(())
-}
-```
-
-### Build and Run
-
-```bash
-# Add WASI target
-rustup target add wasm32-wasip2
-
-# Build
-cargo build --target wasm32-wasip2 --release
-
-# Run with wasmtime
-wasmtime target/wasm32-wasip2/release/your_tool.wasm
-
-# Test with MCP Inspector
-npx @modelcontextprotocol/inspector wasmtime target/wasm32-wasip2/release/your_tool.wasm
-```
-
-## Examples
-
-| Example | Runtime | Description | Location |
-|---------|---------|-------------|----------|
-| WASM Calculator | WASI | Basic arithmetic operations | [examples/wasm-calculator](examples/wasm-calculator) |
-| WASM Fullstack | WasmEdge | PostgreSQL + HTTP/stdio | [examples/wasm-fullstack](examples/wasm-fullstack) |
-| Native Examples | Native | Client/server implementations | [examples/README.md](examples/README.md) |
-
-### Using WASM Artifacts with Claude CLI
-
-Add the compiled WASM server to Claude CLI:
-
-```bash
-# Build the wasm-fullstack example first
-cd examples/wasm-fullstack
-cargo build --target wasm32-wasip1 --release
-
-# Add to Claude CLI
-claude mcp add-json wasm-fullstack '{
-  "type":"stdio",
-  "command":"wasmedge",
-  "args":[
-    "--dir","/path/to/home:/path/to/home",
-    "/path/to/mcpkit-rs/examples/wasm-fullstack/target/wasm32-wasip1/release/wasm-fullstack-stdio.wasm"
-  ],
-  "env":{"RUST_LOG":"info"}
-}'
-```
-
-Test the connection:
-
-```bash
-# Connect and verify
-claude --debug "mcp"
-# Use /mcp to connect to wasm-fullstack server
-
-# Call a tool
-claude -p \
-  --allowedTools "mcp__wasm-fullstack__db_stats" \
-  --debug mcp \
-  "Call the db_stats tool and return the raw JSON result only."
-```
-
-Expected output:
-```json
-{
-  "completed": 1,
-  "completion_rate": 25.0,
-  "pending": 3,
-  "source": "postgresql",
-  "total": 4,
-  "unique_users": 2
-}
-```
-
+See the [examples directory](examples/) for working implementations.
 
 ## Resources
 

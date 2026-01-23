@@ -10,9 +10,7 @@ anyhow = "1.0"
 axum = "0.8"
 clap = { version = "4.0", features = ["derive"] }
 futures = "0.3"
-rand = "0.9"
-reqwest = "0.12"
-rmcp = { workspace = true, features = [
+mcpkit_rs = { workspace = true, features = [
     "client",
     "reqwest",
     "transport-streamable-http-client-reqwest",
@@ -20,6 +18,8 @@ rmcp = { workspace = true, features = [
     "tower",
     "auth"
 ] }
+rand = "0.9"
+reqwest = "0.12"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 tokio = { version = "=1.36.0", features = ["full"] }

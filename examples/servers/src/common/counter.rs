@@ -1,8 +1,7 @@
 #![allow(dead_code)]
 use std::{any::Any, sync::Arc};
 
-use chrono::Utc;
-use rmcp::{
+use mcpkit_rs::{
     ErrorData as McpError, RoleServer, ServerHandler,
     handler::server::{
         router::{prompt::PromptRouter, tool::ToolRouter},
@@ -12,14 +11,11 @@ use rmcp::{
     prompt, prompt_handler, prompt_router, schemars,
     service::RequestContext,
     task_handler,
-    task_manager::{
-        OperationDescriptor, OperationMessage, OperationProcessor, OperationResultTransport,
-    },
+    task_manager::{OperationProcessor, OperationResultTransport},
     tool, tool_handler, tool_router,
 };
 use serde_json::json;
 use tokio::sync::Mutex;
-use tracing::info;
 
 struct ToolCallOperationResult {
     id: String,
@@ -143,7 +139,7 @@ impl Counter {
     /// This is an example prompt that takes one required argument, message
     #[prompt(
         name = "example_prompt",
-        meta = Meta(rmcp::object!({"meta_key": "meta_value"}))
+        meta = Meta(mcpkit_rs::serde_json::json!({"meta_key": "meta_value"}).as_object().unwrap().clone())
     )]
     async fn example_prompt(
         &self,
@@ -195,8 +191,8 @@ impl Counter {
     }
 }
 
-#[tool_handler(meta = Meta(rmcp::object!({"tool_meta_key": "tool_meta_value"})))]
-#[prompt_handler(meta = Meta(rmcp::object!({"router_meta_key": "router_meta_value"})))]
+#[tool_handler(meta = Meta(mcpkit_rs::serde_json::json!({"tool_meta_key": "tool_meta_value"}).as_object().unwrap().clone()))]
+#[prompt_handler(meta = Meta(mcpkit_rs::serde_json::json!({"router_meta_key": "router_meta_value"}).as_object().unwrap().clone()))]
 #[task_handler]
 impl ServerHandler for Counter {
     fn get_info(&self) -> ServerInfo {
@@ -282,7 +278,7 @@ impl ServerHandler for Counter {
 
 #[cfg(test)]
 mod tests {
-    use rmcp::{ClientHandler, ServiceExt};
+    use mcpkit_rs::{ClientHandler, ServiceExt};
     use tokio::time::Duration;
 
     use super::*;
