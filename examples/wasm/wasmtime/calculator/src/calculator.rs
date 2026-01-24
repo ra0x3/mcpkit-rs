@@ -3,7 +3,7 @@
 use mcpkit_rs::{
     ServerHandler,
     handler::server::{router::tool::ToolRouter, wrapper::Parameters},
-    model::{ServerCapabilities, ServerInfo},
+    model::{Implementation, ServerCapabilities, ServerInfo},
     tool, tool_handler, tool_router,
 };
 
