@@ -13,8 +13,15 @@ readme = { workspace = true }
 publish = false
 
 [dependencies]
+<<<<<<< HEAD
 rig-core = "0.31.0"
 mcpkit_rs = { workspace = true, features = [
+=======
+anyhow = "1.0"
+futures = "0.3"
+rig-core = "0.28.0"
+mcpkit-rs = { path = "../../crates/mcpkit-rs", version = "0.15.0", features = [
+>>>>>>> 4950fd1 (release: v0.15.0)
     "client",
     "transport-child-process",
     "transport-streamable-http-client-reqwest"
