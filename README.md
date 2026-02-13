@@ -217,6 +217,58 @@ module.wasm  config.yaml  manifest.json
 
 Authenticate with `GITHUB_USER` and `GITHUB_TOKEN` environment variables. See [examples/wasm/wasmtime/calculator](examples/wasm/wasmtime/calculator) for a complete implementation.
 
+## Security Model
+
+### Sandboxing Architecture
+
+**What's sandboxed:** MCP tools (WASM modules) are sandboxed from the host system and each other.
+
+**Sandbox boundaries:**
+- **Memory isolation**: Each WASM instance has its own linear memory, no shared memory between modules
+- **Capability-based access**: No syscalls without explicit grants via WASI capabilities
+- **Resource limits**: CPU, memory, and execution time enforced by runtime
+
+### Threat Model
+
+**Protects against:**
+- Malicious MCP tools accessing host filesystem outside allowed paths
+- Network exfiltration from calculator tools that shouldn't have network access
+- Resource exhaustion (CPU/memory DoS)
+- Cross-tool contamination (tools cannot access each other's memory/state)
+- Unauthorized tool invocation (policy filters which tools are exposed)
+
+**Does NOT protect against:**
+- Malicious MCP clients (clients are trusted)
+- Side-channel attacks (timing, cache)
+- Supply chain attacks (you must trust the WASM binary source)
+- Bugs in the WASM runtime itself (Wasmtime/WasmEdge)
+- Policy misconfiguration (overly permissive policies)
+
+### Data Flow
+
+**Data IN:** MCP JSON-RPC requests → Policy enforcement → WASM module via function imports
+
+**Data OUT:** WASM return values → Policy enforcement → MCP JSON-RPC responses
+
+**Example enforcement:**
+```yaml
+# config.yaml policy section
+policy:
+  core:
+    network:
+      deny: ["*"]                    # No network access
+    storage:
+      allow:
+        - uri: "fs:///tmp/**"        # Only /tmp access
+          access: ["read", "write"]
+  mcp:
+    tools:
+      allow: ["add", "subtract"]     # Only these tools exposed
+      deny: ["*"]                    # Hide all others
+```
+
+Runtime enforcement happens at WASI call boundaries - the WASM module literally cannot make syscalls that weren't pre-approved in the policy.
+
 ## Resources
 
 - [MCP Specification](https://modelcontextprotocol.io/specification/2025-11-25)
