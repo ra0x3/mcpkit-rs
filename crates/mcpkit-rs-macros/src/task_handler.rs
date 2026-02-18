@@ -126,17 +126,10 @@ pub fn task_handler(attr: TokenStream, input: TokenStream) -> syn::Result<TokenS
         let get_info_fn = quote! {
             async fn get_task_info(
                 &self,
-<<<<<<< HEAD:crates/rmcp-macros/src/task_handler.rs
-                request: rmcp::model::GetTaskInfoParam,
-                _context: rmcp::service::RequestContext<rmcp::RoleServer>,
-            ) -> Result<rmcp::model::GetTaskResult, McpError> {
-                use rmcp::task_manager::current_timestamp;
-=======
                 request: mcpkit_rs::model::GetTaskInfoParam,
                 _context: mcpkit_rs::service::RequestContext<mcpkit_rs::RoleServer>,
-            ) -> Result<mcpkit_rs::model::GetTaskInfoResult, McpError> {
+            ) -> Result<mcpkit_rs::model::GetTaskResult, McpError> {
                 use mcpkit_rs::task_manager::current_timestamp;
->>>>>>> 8b8238d (feat: rename + restructure project for extensions):crates/mcpkit-rs-macros/src/task_handler.rs
                 let task_id = request.task_id.clone();
                 let mut processor = (#processor).lock().await;
 
@@ -167,11 +160,7 @@ pub fn task_handler(attr: TokenStream, input: TokenStream) -> syn::Result<TokenS
                         ttl: completed_result.descriptor.ttl,
                         poll_interval: None,
                     };
-<<<<<<< HEAD:crates/rmcp-macros/src/task_handler.rs
-                    return Ok(rmcp::model::GetTaskResult { meta: None, task });
-=======
-                    return Ok(mcpkit_rs::model::GetTaskInfoResult { task: Some(task) });
->>>>>>> 8b8238d (feat: rename + restructure project for extensions):crates/mcpkit-rs-macros/src/task_handler.rs
+                    return Ok(mcpkit_rs::model::GetTaskResult { meta: None, task });
                 }
 
                 // If not completed, check running
@@ -187,17 +176,10 @@ pub fn task_handler(attr: TokenStream, input: TokenStream) -> syn::Result<TokenS
                         ttl: None,
                         poll_interval: None,
                     };
-<<<<<<< HEAD:crates/rmcp-macros/src/task_handler.rs
-                    return Ok(rmcp::model::GetTaskResult { meta: None, task });
+                    return Ok(mcpkit_rs::model::GetTaskResult { meta: None, task });
                 }
 
                 Err(McpError::resource_not_found(format!("task not found: {}", task_id), None))
-=======
-                    return Ok(mcpkit_rs::model::GetTaskInfoResult { task: Some(task) });
-                }
-
-                Ok(mcpkit_rs::model::GetTaskInfoResult { task: None })
->>>>>>> 8b8238d (feat: rename + restructure project for extensions):crates/mcpkit-rs-macros/src/task_handler.rs
             }
         };
         item_impl.items.push(syn::parse2::<ImplItem>(get_info_fn)?);
@@ -207,15 +189,9 @@ pub fn task_handler(attr: TokenStream, input: TokenStream) -> syn::Result<TokenS
         let get_result_fn = quote! {
             async fn get_task_result(
                 &self,
-<<<<<<< HEAD:crates/rmcp-macros/src/task_handler.rs
-                request: rmcp::model::GetTaskResultParam,
-                _context: rmcp::service::RequestContext<rmcp::RoleServer>,
-            ) -> Result<rmcp::model::GetTaskPayloadResult, McpError> {
-=======
                 request: mcpkit_rs::model::GetTaskResultParam,
                 _context: mcpkit_rs::service::RequestContext<mcpkit_rs::RoleServer>,
-            ) -> Result<mcpkit_rs::model::TaskResult, McpError> {
->>>>>>> 8b8238d (feat: rename + restructure project for extensions):crates/mcpkit-rs-macros/src/task_handler.rs
+            ) -> Result<mcpkit_rs::model::GetTaskPayloadResult, McpError> {
                 use std::time::Duration;
                 let task_id = request.task_id.clone();
 
@@ -231,15 +207,7 @@ pub fn task_handler(attr: TokenStream, input: TokenStream) -> syn::Result<TokenS
                                         match &tool.result {
                                             Ok(call_tool) => {
                                                 let value = ::serde_json::to_value(call_tool).unwrap_or(::serde_json::Value::Null);
-<<<<<<< HEAD:crates/rmcp-macros/src/task_handler.rs
-                                                return Ok(rmcp::model::GetTaskPayloadResult(value));
-=======
-                                                return Ok(mcpkit_rs::model::TaskResult {
-                                                    content_type: "application/json".to_string(),
-                                                    value,
-                                                    summary: None,
-                                                });
->>>>>>> 8b8238d (feat: rename + restructure project for extensions):crates/mcpkit-rs-macros/src/task_handler.rs
+                                                return Ok(mcpkit_rs::model::GetTaskPayloadResult(value));
                                             }
                                             Err(err) => return Err(McpError::internal_error(
                                                 format!("task failed: {}", err),
@@ -277,31 +245,25 @@ pub fn task_handler(attr: TokenStream, input: TokenStream) -> syn::Result<TokenS
         let cancel_fn = quote! {
             async fn cancel_task(
                 &self,
-<<<<<<< HEAD:crates/rmcp-macros/src/task_handler.rs
-                request: rmcp::model::CancelTaskParam,
-                _context: rmcp::service::RequestContext<rmcp::RoleServer>,
-            ) -> Result<rmcp::model::CancelTaskResult, McpError> {
-                use rmcp::task_manager::current_timestamp;
-=======
                 request: mcpkit_rs::model::CancelTaskParam,
                 _context: mcpkit_rs::service::RequestContext<mcpkit_rs::RoleServer>,
-            ) -> Result<(), McpError> {
->>>>>>> 8b8238d (feat: rename + restructure project for extensions):crates/mcpkit-rs-macros/src/task_handler.rs
+            ) -> Result<mcpkit_rs::model::CancelTaskResult, McpError> {
+                use mcpkit_rs::task_manager::current_timestamp;
                 let task_id = request.task_id;
                 let mut processor = (#processor).lock().await;
 
                 if processor.cancel_task(&task_id) {
                     let timestamp = current_timestamp();
-                    let task = rmcp::model::Task {
+                    let task = mcpkit_rs::model::Task {
                         task_id,
-                        status: rmcp::model::TaskStatus::Cancelled,
+                        status: mcpkit_rs::model::TaskStatus::Cancelled,
                         status_message: None,
                         created_at: timestamp.clone(),
                         last_updated_at: timestamp,
                         ttl: None,
                         poll_interval: None,
                     };
-                    return Ok(rmcp::model::CancelTaskResult { meta: None, task });
+                    return Ok(mcpkit_rs::model::CancelTaskResult { meta: None, task });
                 }
 
                 // If already completed, signal it's not cancellable

@@ -607,7 +607,7 @@ async fn test_content_to_sampling_content_conversion() -> Result<()> {
 async fn test_content_conversion_unsupported_variants() {
     use std::convert::TryInto;
 
-    use rmcp::model::ResourceContents;
+    use mcpkit_rs::model::ResourceContents;
 
     let resource_content = Content::resource(ResourceContents::TextResourceContents {
         uri: "file:///test.txt".to_string(),

@@ -89,7 +89,7 @@ async fn push_bundle(
     uri: Option<String>,
     no_verify: bool,
 ) -> Result<()> {
-    println!("{}", "📦 Pushing bundle...".blue().bold());
+    println!("{}", "Pushing bundle...".blue().bold());
 
     let wasm = std::fs::read(&wasm_path)
         .with_context(|| format!("Failed to read WASM file: {}", wasm_path.display()))?;
@@ -141,7 +141,7 @@ async fn push_bundle(
         Ok(digest) => digest,
         Err(e) => {
             if e.to_string().contains("AuthenticationRequired") {
-                eprintln!("{}", "❌ Authentication failed!".red().bold());
+                eprintln!("{}", "Authentication failed!".red().bold());
                 eprintln!();
                 eprintln!("For GitHub Container Registry:");
                 eprintln!("  1. Set GITHUB_USER to your GitHub username");
@@ -158,13 +158,18 @@ async fn push_bundle(
             } else if e.to_string().contains("environment variable")
                 && e.to_string().contains("not set")
             {
-                eprintln!("{}", "❌ Missing environment variable!".red().bold());
+                eprintln!("{}", "Missing environment variable!".red().bold());
                 eprintln!();
                 eprintln!("{}", e);
                 eprintln!();
                 eprintln!("Please set the required environment variable and try again.");
                 std::process::exit(1);
             }
+
+            // For any other error, also ensure we exit with proper error code
+            eprintln!("{}", "Bundle push failed!".red().bold());
+            eprintln!();
+            eprintln!("Error: {}", e);
             return Err(e.into());
         }
     };
@@ -175,12 +180,12 @@ async fn push_bundle(
         println!("  Digest: {}", digest.green());
     }
 
-    println!("{}", "✨ Bundle pushed successfully!".green().bold());
+    println!("{}", "Bundle pushed successfully!".green().bold());
     Ok(())
 }
 
 async fn pull_bundle(uri: String, output: Option<PathBuf>, force: bool) -> Result<()> {
-    println!("{}", "📥 Pulling bundle...".blue().bold());
+    println!("{}", "Pulling bundle...".blue().bold());
     println!("  Source: {}", uri.yellow());
 
     let cache_dir = BundleCache::default_dir();
@@ -212,7 +217,7 @@ async fn pull_bundle(uri: String, output: Option<PathBuf>, force: bool) -> Resul
         Ok(bundle) => bundle,
         Err(e) => {
             if e.to_string().contains("AuthenticationRequired") {
-                eprintln!("{}", "❌ Authentication required!".red().bold());
+                eprintln!("{}", "Authentication required!".red().bold());
                 eprintln!();
                 eprintln!("This registry requires authentication to pull bundles.");
                 eprintln!();
@@ -242,7 +247,7 @@ async fn pull_bundle(uri: String, output: Option<PathBuf>, force: bool) -> Resul
         println!("  Saved to: {}", output_dir.display());
     }
 
-    println!("{}", "✨ Bundle pulled successfully!".green().bold());
+    println!("{}", "Bundle pulled successfully!".green().bold());
     Ok(())
 }
 
@@ -257,9 +262,7 @@ async fn list_bundles(verbose: bool) -> Result<()> {
 
     println!(
         "{}",
-        format!("📦 {} cached bundle(s):", bundles.len())
-            .blue()
-            .bold()
+        format!("{} cached bundle(s):", bundles.len()).blue().bold()
     );
 
     for uri in bundles {
@@ -284,7 +287,7 @@ async fn manage_cache(clear: bool, stats: bool, verify: bool) -> Result<()> {
 
     if clear {
         cache.clear()?;
-        println!("{}", "✨ Cache cleared successfully!".green().bold());
+        println!("{}", "Cache cleared successfully!".green().bold());
     }
 
     if stats {
@@ -296,7 +299,7 @@ async fn manage_cache(clear: bool, stats: bool, verify: bool) -> Result<()> {
     }
 
     if verify {
-        println!("{}", "🔍 Verifying cache integrity...".blue().bold());
+        println!("{}", "Verifying cache integrity...".blue().bold());
         let corrupted = cache.verify()?;
 
         if corrupted.is_empty() {

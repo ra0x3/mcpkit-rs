@@ -4,7 +4,7 @@ use http::{HeaderName, HeaderValue};
 
 #[test]
 fn test_config_custom_headers_default_empty() {
-    use rmcp::transport::streamable_http_client::StreamableHttpClientTransportConfig;
+    use mcpkit_rs::transport::streamable_http_client::StreamableHttpClientTransportConfig;
 
     let config = StreamableHttpClientTransportConfig::with_uri("http://localhost:8080");
     assert!(
@@ -15,7 +15,7 @@ fn test_config_custom_headers_default_empty() {
 
 #[test]
 fn test_config_custom_headers_builder() {
-    use rmcp::transport::streamable_http_client::StreamableHttpClientTransportConfig;
+    use mcpkit_rs::transport::streamable_http_client::StreamableHttpClientTransportConfig;
 
     let mut headers = HashMap::new();
     headers.insert(
@@ -37,7 +37,7 @@ fn test_config_custom_headers_builder() {
 
 #[test]
 fn test_config_custom_headers_multiple_values() {
-    use rmcp::transport::streamable_http_client::StreamableHttpClientTransportConfig;
+    use mcpkit_rs::transport::streamable_http_client::StreamableHttpClientTransportConfig;
 
     let mut headers = HashMap::new();
     headers.insert(
@@ -79,7 +79,7 @@ fn test_config_custom_headers_multiple_values() {
 
 #[test]
 fn test_config_auth_header_and_custom_headers_together() {
-    use rmcp::transport::streamable_http_client::StreamableHttpClientTransportConfig;
+    use mcpkit_rs::transport::streamable_http_client::StreamableHttpClientTransportConfig;
 
     let mut headers = HashMap::new();
     headers.insert(
@@ -106,7 +106,7 @@ fn test_config_auth_header_and_custom_headers_together() {
 async fn test_post_message_rejects_accept_header() {
     use std::sync::Arc;
 
-    use rmcp::{
+    use mcpkit_rs::{
         model::{ClientJsonRpcMessage, ClientRequest, PingRequest, RequestId},
         transport::streamable_http_client::{StreamableHttpClient, StreamableHttpError},
     };
@@ -151,7 +151,7 @@ async fn test_post_message_rejects_accept_header() {
 async fn test_post_message_rejects_mcp_session_id() {
     use std::sync::Arc;
 
-    use rmcp::{
+    use mcpkit_rs::{
         model::{ClientJsonRpcMessage, ClientRequest, PingRequest, RequestId},
         transport::streamable_http_client::{StreamableHttpClient, StreamableHttpError},
     };
@@ -196,7 +196,7 @@ async fn test_post_message_rejects_mcp_session_id() {
 async fn test_post_message_rejects_mcp_protocol_version() {
     use std::sync::Arc;
 
-    use rmcp::{
+    use mcpkit_rs::{
         model::{ClientJsonRpcMessage, ClientRequest, PingRequest, RequestId},
         transport::streamable_http_client::{StreamableHttpClient, StreamableHttpError},
     };
@@ -244,7 +244,7 @@ async fn test_post_message_rejects_mcp_protocol_version() {
 async fn test_post_message_rejects_last_event_id() {
     use std::sync::Arc;
 
-    use rmcp::{
+    use mcpkit_rs::{
         model::{ClientJsonRpcMessage, ClientRequest, PingRequest, RequestId},
         transport::streamable_http_client::{StreamableHttpClient, StreamableHttpError},
     };
@@ -289,7 +289,7 @@ async fn test_post_message_rejects_last_event_id() {
 async fn test_post_message_case_insensitive_matching() {
     use std::sync::Arc;
 
-    use rmcp::{
+    use mcpkit_rs::{
         model::{ClientJsonRpcMessage, ClientRequest, PingRequest, RequestId},
         transport::streamable_http_client::{StreamableHttpClient, StreamableHttpError},
     };
@@ -350,7 +350,7 @@ async fn test_mcp_custom_headers_sent_to_server() -> anyhow::Result<()> {
         Router, body::Bytes, extract::State, http::StatusCode, response::IntoResponse,
         routing::post,
     };
-    use rmcp::{
+    use mcpkit_rs::{
         ServiceExt,
         transport::{
             StreamableHttpClientTransport,

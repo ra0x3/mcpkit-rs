@@ -340,6 +340,7 @@ jobs:
 
       - name: Test Calculator with test harness
         env:
+          CI: "true"
           GITHUB_USER: ${{ secrets.ENV_GITHUB_USER }}
           GITHUB_TOKEN: ${{ secrets.ENV_GITHUB_TOKEN }}
         run: |
@@ -363,6 +364,7 @@ jobs:
 
       - name: Test Fullstack with test harness
         env:
+          CI: "true"
           GITHUB_USER: ${{ secrets.ENV_GITHUB_USER }}
           GITHUB_TOKEN: ${{ secrets.ENV_GITHUB_TOKEN }}
         run: |

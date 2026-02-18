@@ -791,8 +791,8 @@ impl Peer<RoleServer> {
     /// * `Err(ElicitationError::Service(_))` if the underlying service call failed
     /// # Example
     /// ```rust,no_run
-    /// # use rmcp::*;
-    /// # use rmcp::model::ElicitationAction;
+    /// # use mcpkit_rs::*;
+    /// # use mcpkit_rs::model::ElicitationAction;
     /// # use url::Url;
     ///
     /// async fn example(peer: Peer<RoleServer>) -> Result<(), Box<dyn std::error::Error>> {
@@ -839,8 +839,8 @@ impl Peer<RoleServer> {
     /// # Example
     /// ```rust,no_run
     /// # use std::time::Duration;
-    /// use rmcp::*;
-    /// # use rmcp::model::ElicitationAction;
+    /// use mcpkit_rs::*;
+    /// # use mcpkit_rs::model::ElicitationAction;
     /// # use url::Url;
     ///
     /// async fn example(peer: Peer<RoleServer>) -> Result<(), Box<dyn std::error::Error>> {

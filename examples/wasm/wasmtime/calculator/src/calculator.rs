@@ -62,6 +62,7 @@ impl ServerHandler for Calculator {
                 name: "calculator".to_string(),
                 title: Some("WASM Calculator Server".to_string()),
                 version: "1.0.0".to_string(),
+                description: Some("A simple calculator MCP server".to_string()),
                 icons: None,
                 website_url: None,
             },

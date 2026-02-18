@@ -1,7 +1,5 @@
 use std::{borrow::Cow, fmt::Display};
 
-#[cfg(any(feature = "client", feature = "server"))]
-use crate::ServiceError;
 pub use crate::model::ErrorData;
 #[deprecated(
     note = "Use `mcpkit_rs::ErrorData` instead, `mcpkit_rs::ErrorData` could become `RmcpError` in the future."

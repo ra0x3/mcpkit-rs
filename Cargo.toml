@@ -20,11 +20,11 @@ default-members = ["crates/mcpkit-rs", "crates/mcpkit-rs-macros"]
 resolver = "2"
 
 [workspace.dependencies]
-mcpkit-rs = { version = "0.15.0", path = "./crates/mcpkit-rs" }
-mcpkit-rs-cli = { version = "0.15.0", path = "./crates/mcpkit-rs-cli" }
-mcpkit-rs-config = { version = "0.15.0", path = "./crates/mcpkit-rs-config" }
-mcpkit-rs-macros = { version = "0.15.0", path = "./crates/mcpkit-rs-macros" }
-mcpkit-rs-policy = { version = "0.15.0", path = "./crates/mcpkit-rs-policy" }
+mcpkit-rs = { version = "0.16.0", path = "./crates/mcpkit-rs" }
+mcpkit-rs-cli = { version = "0.16.0", path = "./crates/mcpkit-rs-cli" }
+mcpkit-rs-config = { version = "0.16.0", path = "./crates/mcpkit-rs-config" }
+mcpkit-rs-macros = { version = "0.16.0", path = "./crates/mcpkit-rs-macros" }
+mcpkit-rs-policy = { version = "0.16.0", path = "./crates/mcpkit-rs-policy" }
 
 [workspace.package]
 edition = "2024"

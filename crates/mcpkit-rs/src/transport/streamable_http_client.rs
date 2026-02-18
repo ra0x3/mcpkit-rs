@@ -617,12 +617,8 @@ impl<C: StreamableHttpClient> Worker for StreamableHttpClientWorker<C> {
 /// use std::sync::Arc;
 /// use std::collections::HashMap;
 /// use futures::stream::BoxStream;
-<<<<<<< HEAD:crates/rmcp/src/transport/streamable_http_client.rs
-/// use rmcp::model::ClientJsonRpcMessage;
 /// use http::{HeaderName, HeaderValue};
-=======
 /// use mcpkit_rs::model::ClientJsonRpcMessage;
->>>>>>> 8b8238d (feat: rename + restructure project for extensions):crates/mcpkit-rs/src/transport/streamable_http_client.rs
 /// use sse_stream::{Sse, Error as SseError};
 ///
 /// #[derive(Clone)]
@@ -646,12 +642,8 @@ impl<C: StreamableHttpClient> Worker for StreamableHttpClientWorker<C> {
 ///         _message: ClientJsonRpcMessage,
 ///         _session_id: Option<Arc<str>>,
 ///         _auth_header: Option<String>,
-<<<<<<< HEAD:crates/rmcp/src/transport/streamable_http_client.rs
 ///         _custom_headers: HashMap<HeaderName, HeaderValue>,
-///     ) -> Result<rmcp::transport::streamable_http_client::StreamableHttpPostResponse, rmcp::transport::streamable_http_client::StreamableHttpError<Self::Error>> {
-=======
 ///     ) -> Result<mcpkit_rs::transport::streamable_http_client::StreamableHttpPostResponse, mcpkit_rs::transport::streamable_http_client::StreamableHttpError<Self::Error>> {
->>>>>>> 8b8238d (feat: rename + restructure project for extensions):crates/mcpkit-rs/src/transport/streamable_http_client.rs
 ///         todo!()
 ///     }
 ///
@@ -709,12 +701,8 @@ impl<C: StreamableHttpClient> StreamableHttpClientTransport<C> {
     /// use std::sync::Arc;
     /// use std::collections::HashMap;
     /// use futures::stream::BoxStream;
-<<<<<<< HEAD:crates/rmcp/src/transport/streamable_http_client.rs
-    /// use rmcp::model::ClientJsonRpcMessage;
     /// use http::{HeaderName, HeaderValue};
-=======
     /// use mcpkit_rs::model::ClientJsonRpcMessage;
->>>>>>> 8b8238d (feat: rename + restructure project for extensions):crates/mcpkit-rs/src/transport/streamable_http_client.rs
     /// use sse_stream::{Sse, Error as SseError};
     ///
     /// // Define your custom client
@@ -739,12 +727,8 @@ impl<C: StreamableHttpClient> StreamableHttpClientTransport<C> {
     ///         _message: ClientJsonRpcMessage,
     ///         _session_id: Option<Arc<str>>,
     ///         _auth_header: Option<String>,
-<<<<<<< HEAD:crates/rmcp/src/transport/streamable_http_client.rs
     ///         _custom_headers: HashMap<HeaderName, HeaderValue>,
-    ///     ) -> Result<rmcp::transport::streamable_http_client::StreamableHttpPostResponse, rmcp::transport::streamable_http_client::StreamableHttpError<Self::Error>> {
-=======
     ///     ) -> Result<mcpkit_rs::transport::streamable_http_client::StreamableHttpPostResponse, mcpkit_rs::transport::streamable_http_client::StreamableHttpError<Self::Error>> {
->>>>>>> 8b8238d (feat: rename + restructure project for extensions):crates/mcpkit-rs/src/transport/streamable_http_client.rs
     ///         todo!()
     ///     }
     ///
@@ -821,7 +805,7 @@ impl StreamableHttpClientTransportConfig {
     /// ```rust,no_run
     /// use std::collections::HashMap;
     /// use http::{HeaderName, HeaderValue};
-    /// use rmcp::transport::streamable_http_client::StreamableHttpClientTransportConfig;
+    /// use mcpkit_rs::transport::streamable_http_client::StreamableHttpClientTransportConfig;
     ///
     /// let mut headers = HashMap::new();
     /// headers.insert(

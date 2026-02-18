@@ -1,9 +1,5 @@
-#[cfg(feature = "base64")]
-use base64::engine::{Engine, general_purpose::STANDARD as BASE64_STANDARD};
 use serde::{Deserialize, Serialize};
 
-#[cfg(feature = "base64")]
-use super::RawImageContent;
 use super::{
     AnnotateAble, Annotations, Icon, Meta, RawEmbeddedResource,
     content::{EmbeddedResource, ImageContent},
@@ -217,7 +213,6 @@ mod tests {
     use serde_json;
 
     use super::*;
-    use crate::model::RawImageContent;
 
     #[test]
     fn test_prompt_message_image_serialization() {

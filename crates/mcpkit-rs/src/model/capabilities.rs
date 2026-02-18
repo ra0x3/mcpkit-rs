@@ -18,7 +18,7 @@ pub type ExperimentalCapabilities = BTreeMap<String, JsonObject>;
 /// # Example
 ///
 /// ```rust
-/// use rmcp::model::ExtensionCapabilities;
+/// use mcpkit_rs::model::ExtensionCapabilities;
 /// use serde_json::json;
 ///
 /// let mut extensions = ExtensionCapabilities::new();
@@ -427,8 +427,6 @@ builder! {
 }
 
 #[cfg(feature = "macros")]
-impl<const E: bool, const L: bool, const C: bool, const P: bool, const R: bool, const TASKS: bool>
-    ServerCapabilitiesBuilder<ServerCapabilitiesBuilderState<E, L, C, P, R, true, TASKS>>
 impl<
     const E: bool,
     const EXT: bool,
@@ -448,8 +446,6 @@ impl<
 }
 
 #[cfg(feature = "macros")]
-impl<const E: bool, const L: bool, const C: bool, const R: bool, const T: bool, const TASKS: bool>
-    ServerCapabilitiesBuilder<ServerCapabilitiesBuilderState<E, L, C, true, R, T, TASKS>>
 impl<
     const E: bool,
     const EXT: bool,
@@ -469,8 +465,6 @@ impl<
 }
 
 #[cfg(feature = "macros")]
-impl<const E: bool, const L: bool, const C: bool, const P: bool, const T: bool, const TASKS: bool>
-    ServerCapabilitiesBuilder<ServerCapabilitiesBuilderState<E, L, C, P, true, T, TASKS>>
 impl<
     const E: bool,
     const EXT: bool,
@@ -509,8 +503,6 @@ builder! {
 }
 
 #[cfg(feature = "macros")]
-impl<const E: bool, const S: bool, const EL: bool, const TASKS: bool>
-    ClientCapabilitiesBuilder<ClientCapabilitiesBuilderState<E, true, S, EL, TASKS>>
 impl<const E: bool, const EXT: bool, const S: bool, const EL: bool, const TASKS: bool>
     ClientCapabilitiesBuilder<ClientCapabilitiesBuilderState<E, EXT, true, S, EL, TASKS>>
 {
@@ -522,6 +514,7 @@ impl<const E: bool, const EXT: bool, const S: bool, const EL: bool, const TASKS:
     }
 }
 
+#[cfg(feature = "macros")]
 impl<const E: bool, const EXT: bool, const R: bool, const EL: bool, const TASKS: bool>
     ClientCapabilitiesBuilder<ClientCapabilitiesBuilderState<E, EXT, R, true, EL, TASKS>>
 {
@@ -544,8 +537,6 @@ impl<const E: bool, const EXT: bool, const R: bool, const EL: bool, const TASKS:
 
 #[cfg(feature = "elicitation")]
 #[cfg(feature = "macros")]
-impl<const E: bool, const R: bool, const S: bool, const TASKS: bool>
-    ClientCapabilitiesBuilder<ClientCapabilitiesBuilderState<E, R, S, true, TASKS>>
 impl<const E: bool, const EXT: bool, const R: bool, const S: bool, const TASKS: bool>
     ClientCapabilitiesBuilder<ClientCapabilitiesBuilderState<E, EXT, R, S, true, TASKS>>
 {

@@ -20,7 +20,7 @@ pub struct ValidateArgs {
 }
 
 pub async fn execute(args: ValidateArgs) -> Result<()> {
-    println!("{}", "🔍 Validating configuration...".blue().bold());
+    println!("{}", "Validating configuration...".blue().bold());
     println!("  File: {}", args.config.display());
 
     let config_str = std::fs::read_to_string(&args.config)
@@ -69,7 +69,7 @@ pub async fn execute(args: ValidateArgs) -> Result<()> {
     }
 
     if args.check_distribution {
-        println!("\n{}", "📦 Distribution Configuration:".cyan().bold());
+        println!("\n{}", "Distribution Configuration:".cyan().bold());
 
         if let Some(dist) = &config.distribution {
             println!("  Registry: {}", dist.registry);

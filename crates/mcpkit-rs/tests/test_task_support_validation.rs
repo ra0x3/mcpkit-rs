@@ -5,8 +5,9 @@
 //! - `Required`: MUST be invoked as a task, returns -32601 otherwise
 //! - `Forbidden`: MUST NOT be invoked as a task, returns error otherwise
 //! - `Optional`: MAY be invoked either way
+#![cfg(all(feature = "client", feature = "server", feature = "macros"))]
 
-use rmcp::{
+use mcpkit_rs::{
     ClientHandler, ServerHandler, ServiceError, ServiceExt,
     handler::server::router::tool::ToolRouter,
     model::{CallToolRequestParams, ClientInfo, ErrorCode, JsonObject},
