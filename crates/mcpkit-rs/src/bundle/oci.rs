@@ -5,6 +5,7 @@ use std::collections::HashMap;
 use mcpkit_rs_config::RegistryAuth;
 use reqwest::{StatusCode, header::WWW_AUTHENTICATE};
 use serde::{Deserialize, Serialize};
+use tokio::time::sleep;
 
 use super::{Bundle, BundleError, compute_digest, parse_oci_uri, verify_digest};
 
@@ -307,9 +308,15 @@ impl Default for BundleClient {
 impl BundleClient {
     /// Create a new bundle client
     pub fn new() -> Self {
+        // Use longer timeout for CI environments which can be slower
+        let timeout = std::env::var("MCPKIT_HTTP_TIMEOUT")
+            .ok()
+            .and_then(|s| s.parse::<u64>().ok())
+            .unwrap_or(120); // Default to 120 seconds (2 minutes)
+
         let http_client = reqwest::Client::builder()
             .user_agent("mcpkit-rs/0.14.0")
-            .timeout(std::time::Duration::from_secs(30))
+            .timeout(std::time::Duration::from_secs(timeout))
             .build()
             .unwrap_or_else(|_| reqwest::Client::new());
 
@@ -321,9 +328,15 @@ impl BundleClient {
 
     /// Create a new bundle client with cache
     pub fn with_cache(cache: super::cache::BundleCache) -> Self {
+        // Use longer timeout for CI environments which can be slower
+        let timeout = std::env::var("MCPKIT_HTTP_TIMEOUT")
+            .ok()
+            .and_then(|s| s.parse::<u64>().ok())
+            .unwrap_or(120); // Default to 120 seconds (2 minutes)
+
         let http_client = reqwest::Client::builder()
             .user_agent("mcpkit-rs/0.14.0")
-            .timeout(std::time::Duration::from_secs(30))
+            .timeout(std::time::Duration::from_secs(timeout))
             .build()
             .unwrap_or_else(|_| reqwest::Client::new());
 
@@ -356,25 +369,61 @@ impl BundleClient {
     where
         F: FnMut() -> reqwest::RequestBuilder,
     {
-        let mut attempts = 0;
+        let mut auth_attempts = 0;
+        const MAX_AUTH_ATTEMPTS: u32 = 3;
+        const MAX_NETWORK_RETRIES: u32 = 3;
 
         loop {
-            attempts += 1;
+            auth_attempts += 1;
 
-            let mut request = build_request();
-            if let Some(token) = auth.bearer_token() {
-                request = request.bearer_auth(token);
-            } else if let Some((username, password)) = auth.basic_credentials() {
-                request = request.basic_auth(username, Some(password));
-            }
+            // Try to send the request with network retry logic
+            let response = {
+                let mut network_attempts = 0;
+                let mut last_error = None;
 
-            let response = request.send().await.map_err(OciError::from)?;
+                loop {
+                    network_attempts += 1;
+
+                    let mut request = build_request();
+                    if let Some(token) = auth.bearer_token() {
+                        request = request.bearer_auth(token);
+                    } else if let Some((username, password)) = auth.basic_credentials() {
+                        request = request.basic_auth(username, Some(password));
+                    }
+
+                    match request.send().await {
+                        Ok(resp) => break resp,
+                        Err(err) => {
+                            // Check if this is a transient network error that we should retry
+                            if network_attempts < MAX_NETWORK_RETRIES
+                                && (err.is_connect() || err.is_timeout())
+                            {
+                                // Exponential backoff: 1s, 2s, 4s
+                                let delay =
+                                    std::time::Duration::from_secs(2u64.pow(network_attempts - 1));
+                                eprintln!(
+                                    "Network error (attempt {}/{}): {}. Retrying in {:?}...",
+                                    network_attempts, MAX_NETWORK_RETRIES, err, delay
+                                );
+                                sleep(delay).await;
+                                last_error = Some(err);
+                                continue;
+                            }
+                            // Not a retryable error or max retries exhausted
+                            if let Some(_last_err) = last_error {
+                                eprintln!("HTTP request failed after {} retries", network_attempts);
+                            }
+                            return Err(OciError::HttpError(err));
+                        }
+                    }
+                }
+            };
 
             if response.status() != StatusCode::UNAUTHORIZED {
                 return Ok(response);
             }
 
-            if !auth.can_fetch_token() || attempts >= 3 {
+            if !auth.can_fetch_token() || auth_attempts >= MAX_AUTH_ATTEMPTS {
                 return Err(OciError::AuthenticationRequired);
             }
 

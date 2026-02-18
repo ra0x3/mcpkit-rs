@@ -1,7 +1,6 @@
 [package]
 name = "mcpkit-rs"
 license = { workspace = true }
-license-file = { workspace = true }
 version = { workspace = true }
 edition = { workspace = true }
 repository = { workspace = true }
@@ -98,10 +97,9 @@ process-wrap = { version = "6.0.1", features = ["tokio1"], optional = true }
 rand = { version = "0.9", optional = true }
 
 # for HTTP client
-reqwest = { version = "0.12", default-features = false, features = [
+reqwest = { version = "0.13.2", default-features = false, features = [
   "json",
   "stream",
-  "rustls-tls",
 ], optional = true }
 
 # for auto generate schema
@@ -166,12 +164,7 @@ path = "tests/test_metering_integration.rs"
 
 [[test]]
 name = "test_with_python"
-required-features = [
-  "reqwest",
-  "server",
-  "client",
-  "transport-child-process",
-]
+required-features = ["reqwest", "server", "client", "transport-child-process"]
 path = "tests/test_with_python.rs"
 
 [[test]]
@@ -256,10 +249,10 @@ path = "tests/test_close_connection.rs"
 [[test]]
 name = "test_custom_headers"
 required-features = [
-  "client",
-  "server",
-  "transport-streamable-http-client-reqwest",
-  "transport-streamable-http-server",
+    "client",
+    "server",
+    "transport-streamable-http-client-reqwest",
+    "transport-streamable-http-server",
 ]
 path = "tests/test_custom_headers.rs"
 

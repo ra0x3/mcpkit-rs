@@ -2508,7 +2508,7 @@ impl TryFrom<CreateElicitationRequestParamDeserializeHelper> for CreateElicitati
 /// ```
 /// 2. URL-based elicitation request
 /// ```rust
-/// use rmcp::model::*;
+/// use mcpkit_rs::model::*;
 /// let params = CreateElicitationRequestParams::UrlElicitationParams {
 ///     meta: None,
 ///     message: "Please provide your feedback at the following URL".to_string(),
@@ -3755,7 +3755,12 @@ mod tests {
         {
             assert_eq!(
                 meta,
-                Some(Meta(object!({ "meta_form_key_1": "meta form value 1" })))
+                Some(Meta(
+                    json!({ "meta_form_key_1": "meta form value 1" })
+                        .as_object()
+                        .unwrap()
+                        .clone(),
+                ))
             );
             assert_eq!(message, "Please provide more details.");
             assert_eq!(requested_schema.title, Some(Cow::from("User Details")));
@@ -3782,7 +3787,12 @@ mod tests {
         {
             assert_eq!(
                 meta,
-                Some(Meta(object!({ "meta_url_key_1": "meta url value 1" })))
+                Some(Meta(
+                    json!({ "meta_url_key_1": "meta url value 1" })
+                        .as_object()
+                        .unwrap()
+                        .clone(),
+                ))
             );
             assert_eq!(message, "Please fill out the form at the following URL.");
             assert_eq!(url, "https://example.com/form");
@@ -3795,7 +3805,12 @@ mod tests {
     #[test]
     fn test_elicitation_serialization() {
         let form_elicitation = CreateElicitationRequestParams::FormElicitationParams {
-            meta: Some(Meta(object!({ "meta_form_key_1": "meta form value 1" }))),
+            meta: Some(Meta(
+                json!({ "meta_form_key_1": "meta form value 1" })
+                    .as_object()
+                    .unwrap()
+                    .clone(),
+            )),
             message: "Please provide more details.".to_string(),
             requested_schema: ElicitationSchema::builder()
                 .title("User Details")
@@ -3819,7 +3834,12 @@ mod tests {
         assert_eq!(json_form, expected_form_json);
 
         let url_elicitation = CreateElicitationRequestParams::UrlElicitationParams {
-            meta: Some(Meta(object!({ "meta_url_key_1": "meta url value 1" }))),
+            meta: Some(Meta(
+                json!({ "meta_url_key_1": "meta url value 1" })
+                    .as_object()
+                    .unwrap()
+                    .clone(),
+            )),
             message: "Please fill out the form at the following URL.".to_string(),
             url: "https://example.com/form".to_string(),
             elicitation_id: "elicitation-123".to_string(),

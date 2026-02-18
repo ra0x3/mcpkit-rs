@@ -5,6 +5,7 @@ mod tests {
     use schemars::generate::SchemaSettings;
 
     fn compare_schemas(name: &str, actual: &str, expected_file: &str) {
+        let should_update = std::env::var("UPDATE_SCHEMA").is_ok();
         let expected = match std::fs::read_to_string(expected_file) {
             Ok(content) => content,
             Err(e) => {
@@ -17,10 +18,22 @@ mod tests {
 
         let actual_json: serde_json::Value =
             serde_json::from_str(actual).expect("Failed to parse actual schema as JSON");
-        let expected_json: serde_json::Value =
-            serde_json::from_str(&expected).expect("Failed to parse expected schema as JSON");
+        let expected_json = match serde_json::from_str::<serde_json::Value>(&expected) {
+            Ok(json) => Some(json),
+            Err(e) => {
+                if should_update {
+                    println!(
+                        "Expected schema {} is invalid JSON ({}), UPDATE_SCHEMA is set; regenerating",
+                        expected_file, e
+                    );
+                    None
+                } else {
+                    panic!("Failed to parse expected schema as JSON: {}", e);
+                }
+            }
+        };
 
-        if actual_json == expected_json {
+        if expected_json.as_ref() == Some(&actual_json) {
             println!("{} schema matches expected", name);
             return;
         }
@@ -38,7 +51,7 @@ mod tests {
         );
 
         // UPDATE_SCHEMA=1 cargo test -p rmcp --test test_message_schema --features="server client schemars"
-        if std::env::var("UPDATE_SCHEMA").is_ok() {
+        if should_update {
             println!("UPDATE_SCHEMA is set, updating expected file");
             std::fs::write(expected_file, actual).expect("Failed to update expected schema file");
             println!("Updated {}", expected_file);

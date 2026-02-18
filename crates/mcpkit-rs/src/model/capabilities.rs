@@ -18,7 +18,7 @@ pub type ExperimentalCapabilities = BTreeMap<String, JsonObject>;
 /// # Example
 ///
 /// ```rust
-/// use rmcp::model::ExtensionCapabilities;
+/// use mcpkit_rs::model::ExtensionCapabilities;
 /// use serde_json::json;
 ///
 /// let mut extensions = ExtensionCapabilities::new();

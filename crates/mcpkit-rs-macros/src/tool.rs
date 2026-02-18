@@ -273,9 +273,9 @@ pub fn tool(attr: TokenStream, input: TokenStream) -> syn::Result<TokenStream> {
 
         let task_support_expr = if let Some(ts) = task_support {
             let ts_ident = match ts.as_str() {
-                "forbidden" => quote! { rmcp::model::TaskSupport::Forbidden },
-                "optional" => quote! { rmcp::model::TaskSupport::Optional },
-                "required" => quote! { rmcp::model::TaskSupport::Required },
+                "forbidden" => quote! { mcpkit_rs::model::TaskSupport::Forbidden },
+                "optional" => quote! { mcpkit_rs::model::TaskSupport::Optional },
+                "required" => quote! { mcpkit_rs::model::TaskSupport::Required },
                 _ => {
                     return Err(syn::Error::new(
                         Span::call_site(),

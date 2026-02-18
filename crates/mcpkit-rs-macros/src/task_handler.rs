@@ -42,7 +42,7 @@ pub fn task_handler(attr: TokenStream, input: TokenStream) -> syn::Result<TokenS
                     .into_iter()
                     .map(|task_id| {
                         let timestamp = mcpkit_rs::task_manager::current_timestamp();
-                        rmcp::model::Task::new(
+                        mcpkit_rs::model::Task::new(
                             task_id,
                             rmcp::model::TaskStatus::Working,
                             timestamp.clone(),
@@ -117,9 +117,9 @@ pub fn task_handler(attr: TokenStream, input: TokenStream) -> syn::Result<TokenS
             async fn get_task_info(
                 &self,
                 request: mcpkit_rs::model::GetTaskInfoParam,
-                _context: mcpkit_rs::service::RequestContext<rmcp::RoleServer>,
-            ) -> Result<rmcp::model::GetTaskResult, McpError> {
-                use rmcp::task_manager::current_timestamp;
+                _context: mcpkit_rs::service::RequestContext<mcpkit_rs::RoleServer>,
+            ) -> Result<mcpkit_rs::model::GetTaskResult, McpError> {
+                use mcpkit_rs::task_manager::current_timestamp;
                 let task_id = request.task_id.clone();
                 let mut processor = (#processor).lock().await;
 
@@ -163,7 +163,7 @@ pub fn task_handler(attr: TokenStream, input: TokenStream) -> syn::Result<TokenS
                         timestamp.clone(),
                         timestamp,
                     );
-                    return Ok(rmcp::model::GetTaskResult { meta: None, task });
+                    return Ok(mcpkit_rs::model::GetTaskResult { meta: None, task });
                 }
 
                 Err(McpError::resource_not_found(format!("task not found: {}", task_id), None))
@@ -177,7 +177,7 @@ pub fn task_handler(attr: TokenStream, input: TokenStream) -> syn::Result<TokenS
             async fn get_task_result(
                 &self,
                 request: mcpkit_rs::model::GetTaskResultParam,
-                _context: mcpkit_rs::service::RequestContext<rmcp::RoleServer>,
+                _context: mcpkit_rs::service::RequestContext<mcpkit_rs::RoleServer>,
             ) -> Result<mcpkit_rs::model::GetTaskPayloadResult, McpError> {
                 use std::time::Duration;
                 let task_id = request.task_id.clone();
@@ -233,9 +233,9 @@ pub fn task_handler(attr: TokenStream, input: TokenStream) -> syn::Result<TokenS
             async fn cancel_task(
                 &self,
                 request: mcpkit_rs::model::CancelTaskParam,
-                _context: mcpkit_rs::service::RequestContext<rmcp::RoleServer>,
+                _context: mcpkit_rs::service::RequestContext<mcpkit_rs::RoleServer>,
             ) -> Result<mcpkit_rs::model::CancelTaskResult, McpError> {
-                use rmcp::task_manager::current_timestamp;
+                use mcpkit_rs::task_manager::current_timestamp;
                 let task_id = request.task_id;
                 let mut processor = (#processor).lock().await;
 
@@ -243,7 +243,7 @@ pub fn task_handler(attr: TokenStream, input: TokenStream) -> syn::Result<TokenS
                     let timestamp = current_timestamp();
                     let task = mcpkit_rs::model::Task::new(
                         task_id,
-                        rmcp::model::TaskStatus::Cancelled,
+                        mcpkit_rs::model::TaskStatus::Cancelled,
                         timestamp.clone(),
                         timestamp,
                     );

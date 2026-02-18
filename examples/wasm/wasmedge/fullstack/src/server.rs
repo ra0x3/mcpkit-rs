@@ -960,6 +960,7 @@ impl ServerHandler for FullStackServer {
                 name: "fullstack".to_string(),
                 title: Some("WASM Fullstack Server".to_string()),
                 version: "1.0.0".to_string(),
+                description: Some("WasmEdge fullstack MCP server with PostgreSQL".to_string()),
                 icons: None,
                 website_url: None,
             },

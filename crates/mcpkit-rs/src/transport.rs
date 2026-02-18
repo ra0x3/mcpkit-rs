@@ -43,12 +43,8 @@
 //! #     ServiceExt, serve_server,
 //! # };
 //! #[cfg(feature = "client")]
-<<<<<<< HEAD:crates/rmcp/src/transport.rs
-//! # use rmcp::serve_client;
-=======
 //! #[cfg_attr(docsrs, doc(cfg(feature = "client")))]
 //! # use mcpkit_rs::serve_client;
->>>>>>> 8b8238d (feat: rename + restructure project for extensions):crates/mcpkit-rs/src/transport.rs
 //!
 //! // create transport from tcp stream
 //! #[cfg(feature = "client")]

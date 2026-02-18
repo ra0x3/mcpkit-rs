@@ -694,7 +694,7 @@ impl<C: StreamableHttpClient> Worker for StreamableHttpClientWorker<C> {
 ///         _session_id: Option<Arc<str>>,
 ///         _auth_header: Option<String>,
 ///         _custom_headers: HashMap<HeaderName, HeaderValue>,
-///     ) -> Result<rmcp::transport::streamable_http_client::StreamableHttpPostResponse, rmcp::transport::streamable_http_client::StreamableHttpError<Self::Error>> {
+///     ) -> Result<mcpkit_rs::transport::streamable_http_client::StreamableHttpPostResponse, mcpkit_rs::transport::streamable_http_client::StreamableHttpError<Self::Error>> {
 ///         todo!()
 ///     }
 ///
@@ -781,7 +781,7 @@ impl<C: StreamableHttpClient> StreamableHttpClientTransport<C> {
     ///         _session_id: Option<Arc<str>>,
     ///         _auth_header: Option<String>,
     ///         _custom_headers: HashMap<HeaderName, HeaderValue>,
-    ///     ) -> Result<mcpkit_rs::transport::streamable_http_client::StreamableHttpPostResponse, rmcp::transport::streamable_http_client::StreamableHttpError<Self::Error>> {
+    ///     ) -> Result<mcpkit_rs::transport::streamable_http_client::StreamableHttpPostResponse, mcpkit_rs::transport::streamable_http_client::StreamableHttpError<Self::Error>> {
     ///         todo!()
     ///     }
     ///
@@ -860,7 +860,7 @@ impl StreamableHttpClientTransportConfig {
     /// ```rust,no_run
     /// use std::collections::HashMap;
     /// use http::{HeaderName, HeaderValue};
-    /// use rmcp::transport::streamable_http_client::StreamableHttpClientTransportConfig;
+    /// use mcpkit_rs::transport::streamable_http_client::StreamableHttpClientTransportConfig;
     ///
     /// let mut headers = HashMap::new();
     /// headers.insert(

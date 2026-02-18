@@ -42,6 +42,7 @@ impl LoadedWasmTool {
                 .as_ref()
                 .map(|s| Arc::new(s.clone())),
             annotations: None,
+            execution: None,
             icons: None,
             meta: None,
         }

@@ -58,7 +58,7 @@ pub fn tool_handler(attr: TokenStream, input: TokenStream) -> syn::Result<TokenS
     };
 
     let get_tool_fn = quote! {
-        fn get_tool(&self, name: &str) -> Option<rmcp::model::Tool> {
+        fn get_tool(&self, name: &str) -> Option<mcpkit_rs::model::Tool> {
             #router.get(name).cloned()
         }
     };
